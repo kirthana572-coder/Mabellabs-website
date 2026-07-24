@@ -42,6 +42,14 @@ function loadUserProfile(user) {
                 const data = doc.data();
                 console.log('📄 Firestore data loaded:', data);
                 
+                // Load avatar if photoURL exists
+                if (data.photoURL) {
+                    const avatar = document.getElementById('avatarDisplay');
+                    if (avatar) {
+                        avatar.innerHTML = `<img src="${data.photoURL}" alt="Profile" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`;
+                    }
+                }
+
                 // Fill all fields
                 document.getElementById('profileName').value = data.fullname || displayName;
                 document.getElementById('profilePhone').value = data.phone || '';
@@ -272,7 +280,7 @@ if (updatePasswordBtn) {
             })
             .catch((error) => {
                 let message = error.message;
-                if (error.code === 'auth/wrong-password') {
+                if (error.code === 'auth/wrong-password' || error.code === 'auth/invalid-login-credentials') {
                     message = 'Current password is incorrect.';
                 }
                 showPasswordMessage('❌ ' + message, 'error');
@@ -318,11 +326,38 @@ if (photoInput) {
         if (file) {
             const reader = new FileReader();
             reader.onload = function(event) {
-                const avatar = document.querySelector('.avatar-circle');
+                const user = firebase.auth().currentUser;
+                if (!user) {
+                    showMessage('❌ Error: You must be logged in to update your profile photo.', 'error');
+                    return;
+                }
+                
+                const avatar = document.getElementById('avatarDisplay');
                 if (avatar) {
                     avatar.innerHTML = `<img src="${event.target.result}" alt="Profile" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`;
-                    showMessage('Profile photo updated!', 'success');
                 }
+
+                // Save Base64 to Firestore
+                db.collection('users').doc(user.uid).update({
+                    photoURL: event.target.result,
+                    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                })
+                .then(() => {
+                    showMessage('✅ Profile photo updated successfully!', 'success');
+                    
+                    // Update header navigation avatar dynamically
+                    const navProfile = document.getElementById('navProfile');
+                    if (navProfile) {
+                        const avatarLink = navProfile.querySelector('a');
+                        if (avatarLink) {
+                            avatarLink.innerHTML = `<span class="avatar-icon" style="display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:50%;background:#7A210C;color:white;font-weight:600;font-size:14px;text-transform:uppercase;overflow:hidden;"><img src="${event.target.result}" alt="" style="width:100%;height:100%;object-fit:cover;"></span>`;
+                        }
+                    }
+                })
+                .catch(error => {
+                    console.error('Error saving photoURL to Firestore:', error);
+                    showMessage('❌ Error saving profile photo to database.', 'error');
+                });
             };
             reader.readAsDataURL(file);
         }

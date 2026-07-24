@@ -63,6 +63,11 @@
                     </div>
 
                     <div class="form-group">
+                        <label for="regPhone">Phone Number</label>
+                        <input type="tel" id="regPhone" placeholder="Enter your phone number" required>
+                    </div>
+
+                    <div class="form-group">
                         <label for="regPassword">Password</label>
                         <input type="password" id="regPassword" placeholder="Create a password" required>
                         <span class="toggle-password" onclick="togglePassword('regPassword')">👁️</span>
@@ -100,6 +105,17 @@
             </div>
         </div>
     </section>
+
+    <!-- Success Confirmation Modal -->
+    <div id="registerSuccessModal" class="modal" style="display: none;">
+        <div class="modal-content" style="text-align: center;">
+            <div class="success-icon" style="width: 70px; height: 70px; background: #d4edda; color: #28a745; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; font-size: 36px; font-weight: bold; border: 2px solid #c3e6cb;">✓</div>
+            <h2>Registration Successful!</h2>
+            <p>Your MABELLABS Malaysia account has been created successfully.</p>
+            <p style="font-size: 13px; color: #777; margin-top: -10px; margin-bottom: 25px;">You are now logged in and ready to explore.</p>
+            <button id="goToHomeBtn" class="auth-btn" style="max-width: 220px; margin: 0 auto;">Go to Home</button>
+        </div>
+    </div>
 
     <footer>
         <div class="footer-links">
