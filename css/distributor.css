@@ -1,0 +1,345 @@
+/* ================= DISTRIBUTOR PAGE ================= */
+
+/* Hero */
+.distributor-hero {
+    background: linear-gradient(135deg, #7A210C, #B5482D);
+    padding: 60px 0 50px;
+    text-align: center;
+    color: white;
+}
+
+.distributor-hero h1 {
+    font-size: 36px;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.distributor-hero p {
+    font-size: 16px;
+    opacity: 0.85;
+}
+
+/* ================= DISTRIBUTOR SECTION ================= */
+.distributor-section {
+    padding: 60px 0 80px;
+    background: #f8f8f8;
+}
+
+.distributor-grid {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr;
+    gap: 40px;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+/* ================= FORM ================= */
+.distributor-form {
+    background: white;
+    padding: 40px;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+}
+
+.distributor-form h2 {
+    font-size: 26px;
+    color: #1a1a1a;
+    font-weight: 600;
+    margin-bottom: 6px;
+}
+
+.distributor-form .form-subtitle {
+    color: #666;
+    font-size: 14px;
+    margin-bottom: 25px;
+}
+
+.form-group {
+    margin-bottom: 18px;
+}
+
+.form-group label {
+    display: block;
+    font-weight: 500;
+    color: #333;
+    font-size: 14px;
+    margin-bottom: 5px;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 12px 16px;
+    border: 2px solid #e8e8e8;
+    border-radius: 8px;
+    font-size: 14px;
+    font-family: 'Poppins', sans-serif;
+    transition: all 0.3s ease;
+    background: white;
+    box-sizing: border-box;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: #7A210C;
+    box-shadow: 0 0 0 3px rgba(122, 33, 12, 0.1);
+}
+
+.form-group textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+/* ================= TERMS & CONDITIONS ================= */
+.terms-section {
+    margin-top: 25px;
+    border-top: 2px solid #f0f0f0;
+    padding-top: 20px;
+}
+
+.terms-section h3 {
+    font-size: 18px;
+    color: #7A210C;
+    margin-bottom: 15px;
+}
+
+.terms-box {
+    background: #f8f4f2;
+    padding: 20px 24px;
+    border-radius: 10px;
+    max-height: 220px;
+    overflow-y: auto;
+    border-left: 4px solid #7A210C;
+    font-size: 13px;
+    line-height: 1.8;
+    color: #444;
+    margin-bottom: 15px;
+}
+
+.terms-box p {
+    margin: 6px 0;
+}
+
+.terms-box ul {
+    margin: 6px 0 10px 20px;
+    padding-left: 10px;
+}
+
+.terms-box ul li {
+    margin-bottom: 3px;
+}
+
+.terms-box strong {
+    color: #1a1a1a;
+}
+
+/* Scrollbar styling */
+.terms-box::-webkit-scrollbar {
+    width: 6px;
+}
+
+.terms-box::-webkit-scrollbar-track {
+    background: #f0ecea;
+    border-radius: 10px;
+}
+
+.terms-box::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 10px;
+}
+
+.terms-box::-webkit-scrollbar-thumb:hover {
+    background: #aaa;
+}
+
+.terms-agree {
+    margin-top: 12px;
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 14px;
+    color: #333;
+    cursor: pointer;
+}
+
+.checkbox-label input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    accent-color: #7A210C;
+    cursor: pointer;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.checkbox-label a {
+    color: #7A210C;
+    font-weight: 500;
+    text-decoration: none;
+}
+
+.checkbox-label a:hover {
+    text-decoration: underline;
+}
+
+/* ================= SUBMIT BUTTON ================= */
+.btn-submit {
+    width: 100%;
+    padding: 14px;
+    background: #ccc;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: 600;
+    font-family: 'Poppins', sans-serif;
+    cursor: not-allowed;
+    transition: all 0.3s ease;
+    margin-top: 20px;
+}
+
+.btn-submit.active {
+    background: #7A210C;
+    cursor: pointer;
+}
+
+.btn-submit.active:hover {
+    background: #A73718;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(122, 33, 12, 0.25);
+}
+
+/* ================= INFO SIDEBAR ================= */
+.distributor-info {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+.info-card {
+    background: white;
+    padding: 30px;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+}
+
+.info-icon {
+    font-size: 36px;
+    display: block;
+    margin-bottom: 12px;
+}
+
+.info-card h3 {
+    font-size: 18px;
+    color: #1a1a1a;
+    font-weight: 600;
+    margin-bottom: 12px;
+}
+
+.info-card ul {
+    list-style: none;
+    padding: 0;
+}
+
+.info-card ul li {
+    padding: 6px 0;
+    font-size: 14px;
+    color: #555;
+    border-bottom: 1px solid #f5f5f5;
+}
+
+.info-card ul li:last-child {
+    border-bottom: none;
+}
+
+.info-card p {
+    font-size: 14px;
+    color: #666;
+    line-height: 1.6;
+    margin-bottom: 8px;
+}
+
+.btn-contact {
+    display: inline-block;
+    padding: 10px 25px;
+    background: #7A210C;
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: 500;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    margin-top: 10px;
+}
+
+.btn-contact:hover {
+    background: #A73718;
+    transform: translateY(-2px);
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media (max-width: 1024px) {
+    .distributor-grid {
+        grid-template-columns: 1fr;
+        max-width: 700px;
+    }
+}
+
+@media (max-width: 768px) {
+    .distributor-hero {
+        padding: 40px 0 30px;
+    }
+    
+    .distributor-hero h1 {
+        font-size: 28px;
+    }
+    
+    .distributor-section {
+        padding: 40px 0 60px;
+    }
+    
+    .distributor-form {
+        padding: 25px 20px;
+    }
+    
+    .distributor-form h2 {
+        font-size: 22px;
+    }
+    
+    .info-card {
+        padding: 25px 20px;
+    }
+    
+    .terms-box {
+        max-height: 160px;
+        font-size: 12px;
+        padding: 15px 18px;
+    }
+    
+    .btn-submit {
+        font-size: 14px;
+        padding: 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    .distributor-form {
+        padding: 20px 15px;
+    }
+    
+    .terms-box {
+        max-height: 140px;
+        padding: 12px 15px;
+        font-size: 11px;
+    }
+    
+    .checkbox-label {
+        font-size: 13px;
+    }
+}

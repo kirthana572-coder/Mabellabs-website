@@ -1,0 +1,800 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:'Poppins', sans-serif;
+    background:#F8F8F8;
+    color:#333;
+}
+
+/* ================= ANIMATIONS ================= */
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(40px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes scaleIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* ================= CONTAINER ================= */
+
+.container{
+    width:90%;
+    max-width:1200px;
+    margin:auto;
+}
+
+/* ================= HEADER ================= */
+
+header{
+    background:rgba(255,255,255,0.92);
+    padding:15px 0;
+    box-shadow:0 2px 8px rgba(0,0,0,0.08);
+    backdrop-filter:blur(10px);
+    animation: fadeIn 0.8s ease forwards;
+}
+
+header .container{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+/* ================= LOGO ================= */
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    /* Main logo container animation */
+    animation: logoFadeIn 1.2s ease forwards;
+}
+
+/* Logo Image Animation */
+.logo img {
+    height: 70px;
+    width: auto;
+    animation: logoZoomRotate 1.5s ease forwards;
+    opacity: 0; /* Starts invisible */
+}
+
+/* Logo Text Animation */
+.logo .company-name {
+    font-size: 24px;
+    font-weight: 700;
+    color: #7A210C;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-family: 'Poppins', sans-serif;
+    animation: textSlideIn 1.5s ease 0.3s forwards;
+    opacity: 0; /* Starts invisible */
+}
+
+/* ================= LOGO ANIMATIONS ================= */
+
+/* Container animation - fades in and slides up */
+@keyframes logoFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Image animation - zooms in and rotates slightly */
+@keyframes logoZoomRotate {
+    from {
+        opacity: 0;
+        transform: scale(0.3) rotate(-15deg);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) rotate(0deg);
+    }
+}
+
+/* Text animation - slides in from left */
+@keyframes textSlideIn {
+    from {
+        opacity: 0;
+        transform: translateX(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+/* ================= NAVIGATION ================= */
+
+nav{
+    animation: fadeInUp 0.8s ease 0.2s forwards;
+    opacity: 0;
+}
+
+nav ul{
+    display:flex;
+    list-style:none;
+}
+
+nav ul li{
+    margin-left:35px;
+}
+
+nav ul li a{
+    text-decoration:none;
+    color:#7A210C;
+    font-weight:600;
+    transition: all 0.3s ease;
+    position:relative;
+}
+
+nav ul li a::after{
+    content:'';
+    position:absolute;
+    bottom:-5px;
+    left:0;
+    width:0;
+    height:2px;
+    background:#B5482D;
+    transition: width 0.3s ease;
+}
+
+nav ul li a:hover{
+    color:#B5482D;
+}
+
+nav ul li a:hover::after{
+    width:100%;
+}
+
+/* Active Navigation Link */
+nav ul li a.active {
+    color: #B5482D;
+}
+
+nav ul li a.active::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: #B5482D;
+}
+
+/* ================= HERO SECTION ================= */
+
+.hero{
+    background: url('../images/skinglow.jpg') no-repeat center center;
+    background-size: cover;
+    padding:120px 0;
+    text-align:center;
+    position:relative;
+    min-height:500px;
+    display:flex;
+    align-items:center;
+    border-radius:15px;
+    margin:20px 0;
+    animation: scaleIn 1s ease forwards;
+}
+
+.hero::before{
+    content:'';
+    position:absolute;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,0.5);
+    border-radius:15px;
+    z-index:1;
+}
+
+.hero .container{
+    position:relative;
+    z-index:2;
+    width:100%;
+}
+
+.hero h1{
+    font-size:45px;
+    color:#FFFFFF;
+    margin-bottom:20px;
+    text-shadow:2px 2px 4px rgba(0,0,0,0.3);
+    animation: fadeInUp 0.8s ease 0.3s forwards;
+    opacity: 0;
+}
+
+.hero p{
+    width:70%;
+    margin:auto;
+    line-height:30px;
+    margin-bottom:35px;
+    color:#FFFFFF;
+    text-shadow:1px 1px 3px rgba(0,0,0,0.3);
+    animation: fadeInUp 0.8s ease 0.5s forwards;
+    opacity: 0;
+}
+
+.btn{
+    display:inline-block;
+    background:#7A210C;
+    color:white;
+    text-decoration:none;
+    padding:14px 35px;
+    border-radius:5px;
+    transition: all 0.3s ease;
+    position:relative;
+    overflow:hidden;
+    animation: fadeInUp 0.8s ease 0.7s forwards;
+    opacity: 0;
+}
+
+.btn:hover{
+    background:#A73718;
+    transform: translateY(-3px);
+    box-shadow:0 8px 25px rgba(122,33,12,0.3);
+}
+
+/* ================= ABOUT SECTION ================= */
+
+.about{
+    padding:80px 0;
+    background: url('../images/skincareskin.jpg') no-repeat center center;
+    background-size: cover;
+    position:relative;
+    margin:20px 0;
+    border-radius:15px;
+}
+
+.about::before{
+    content:'';
+    position:absolute;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,0.5);
+    border-radius:15px;
+    z-index:1;
+}
+
+.about .container{
+    position:relative;
+    z-index:2;
+}
+
+.about h2{
+    text-align:center;
+    color:#FFFFFF;
+    margin-bottom:20px;
+    text-shadow:2px 2px 4px rgba(0,0,0,0.3);
+}
+
+.about p{
+    text-align:center;
+    line-height:30px;
+    color:#FFFFFF;
+    text-shadow:1px 1px 3px rgba(0,0,0,0.3);
+    max-width:800px;
+    margin:0 auto;
+}
+
+/* ================= HOMEPAGE CATEGORY CARDS (BOX LAYOUT) ================= */
+
+.home-products {
+    padding: 80px 0;
+    background: #f8f8f8;
+}
+
+.home-products h2 {
+    text-align: center;
+    color: #7A210C;
+    font-size: 32px;
+    margin-bottom: 40px;
+}
+
+.category-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);  /* Changed from 4 to 3 columns */
+    gap: 25px;
+}
+
+.category-card {
+    background: white;
+    padding: 35px 25px 30px;
+    border-radius: 16px;
+    text-align: center;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    border: 2px solid transparent;
+    position: relative;
+    overflow: hidden;
+}
+
+.category-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1);
+    border-color: #7A210C;
+}
+
+.category-card::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(90deg, #7A210C, #B5482D);
+    transform: scaleX(0);
+    transition: transform 0.4s ease;
+}
+
+.category-card:hover::after {
+    transform: scaleX(1);
+}
+
+.category-card .category-icon {
+    font-size: 44px;
+    display: block;
+    margin-bottom: 12px;
+}
+
+.category-card h3 {
+    font-size: 19px;
+    color: #1a1a1a;
+    margin-bottom: 8px;
+    font-weight: 600;
+}
+
+.category-card p {
+    font-size: 14px;
+    color: #666;
+    line-height: 1.6;
+    margin-bottom: 0;
+}
+
+.category-card .category-arrow {
+    display: inline-block;
+    margin-top: 12px;
+    color: #7A210C;
+    font-size: 18px;
+    opacity: 0;
+    transform: translateX(-10px);
+    transition: all 0.3s ease;
+}
+
+.category-card:hover .category-arrow {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+/* ================= CONTACT SECTION (HOMEPAGE) ================= */
+
+.contact{
+    padding:40px 0 30px;
+    background:white;
+    text-align:center;
+}
+
+.contact h2{
+    color:#7A210C;
+    margin-bottom:15px;
+    font-size:28px;
+}
+
+.contact p{
+    margin-bottom:6px;
+    color:#555;
+    font-size:15px;
+}
+
+/* ================= CONTACT PAGE ================= */
+
+.contact-page {
+    padding: 60px 0 70px;
+    background: url('../images/redatom.jpg') no-repeat center center;
+    background-size: cover;
+    position: relative;
+    display: flex;
+    align-items: center;
+    min-height: 500px;
+}
+
+/* Dark overlay for text readability */
+.contact-page::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 0;
+}
+
+.contact-page .container {
+    position: relative;
+    z-index: 1;
+}
+
+.contact-box {
+    max-width: 700px;
+    margin: 0 auto;
+    background: white;
+    padding: 40px 50px;
+    border-radius: 15px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    text-align: center;
+}
+
+.contact-box h2 {
+    color: #7A210C;
+    font-size: 28px;
+    margin-bottom: 25px;
+    font-weight: 600;
+}
+
+.contact-details {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.contact-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    padding: 12px 18px;
+    background: #f8f8f8;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+}
+
+.contact-item:hover {
+    background: #f0ecea;
+    transform: translateX(5px);
+}
+
+.contact-icon {
+    font-size: 22px;
+    min-width: 36px;
+}
+
+.contact-item p {
+    color: #333;
+    font-size: 15px;
+    margin: 0;
+    line-height: 1.6;
+}
+
+.contact-item p a {
+    color: #7A210C;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.contact-item p a:hover {
+    color: #B5482D;
+}
+
+/* ================= SOCIAL LINK STYLES ================= */
+
+.social-link {
+    color: #7A210C;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.social-link:hover {
+    color: #B5482D;
+    transform: scale(1.05);
+    display: inline-block;
+}
+
+/* Instagram Icon Gradient */
+.contact-item:last-child .contact-icon {
+    background: linear-gradient(135deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* ================= WHATSAPP BUTTON ================= */
+
+.whatsapp-item {
+    background: #25D366 !important;
+    padding: 0 !important;
+    border-radius: 10px !important;
+    transition: all 0.3s ease !important;
+}
+
+.whatsapp-item:hover {
+    transform: scale(1.02) !important;
+    box-shadow: 0 8px 25px rgba(37, 211, 102, 0.3) !important;
+}
+
+.whatsapp-btn {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 12px !important;
+    width: 100% !important;
+    padding: 14px 18px !important;
+    color: white !important;
+    text-decoration: none !important;
+    font-weight: 600 !important;
+    font-size: 15px !important;
+    border-radius: 10px !important;
+    font-family: 'Poppins', sans-serif !important;
+    transition: all 0.3s ease !important;
+}
+
+.whatsapp-btn .whatsapp-icon {
+    font-size: 22px;
+}
+
+.whatsapp-btn:hover {
+    color: white !important;
+}
+
+/* ================= WHATSAPP FLOATING BUTTON ================= */
+
+.whatsapp-float {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background: #25D366;
+    color: white;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+    text-decoration: none;
+    box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4);
+    z-index: 1000;
+    transition: all 0.3s ease;
+    animation: pulse 2s infinite;
+}
+
+.whatsapp-float:hover {
+    transform: scale(1.1);
+    box-shadow: 0 8px 30px rgba(37, 211, 102, 0.6);
+}
+
+/* WhatsApp Pulse Animation */
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.4);
+    }
+    70% {
+        box-shadow: 0 0 0 15px rgba(37, 211, 102, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(37, 211, 102, 0);
+    }
+}
+
+/* ================= FOOTER ================= */
+
+/* ================= FOOTER ================= */
+
+footer {
+    background: #7A210C;
+    color: white;
+    text-align: center;
+    padding: 30px 20px;
+    animation: fadeIn 1s ease 0.5s forwards;
+    opacity: 0;
+}
+
+.footer-links {
+    margin-bottom: 15px;
+}
+
+.footer-links a {
+    color: rgba(255, 255, 255, 0.8);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.footer-links a:hover {
+    color: white;
+    text-decoration: underline;
+}
+
+.footer-links span {
+    color: rgba(255, 255, 255, 0.3);
+    margin: 0 10px;
+}
+
+footer p {
+    font-size: 14px;
+    opacity: 0.7;
+    margin: 0;
+}
+/* ================= RESPONSIVE DESIGN ================= */
+
+@media (max-width: 1024px) {
+    .category-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    /* Header */
+    header .container {
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    nav ul li {
+        margin-left: 20px;
+    }
+    
+    /* Hero */
+    .hero {
+        padding: 80px 0;
+        min-height: 300px;
+    }
+    
+    .hero h1 {
+        font-size: 30px;
+    }
+    
+    .hero p {
+        width: 90%;
+    }
+    
+    /* About */
+    .about {
+        padding: 50px 0;
+    }
+    
+    /* Home Products */
+    .home-products {
+        padding: 50px 0;
+    }
+    
+    .home-products h2 {
+        font-size: 26px;
+        margin-bottom: 30px;
+    }
+    
+    .category-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+    }
+    
+    .category-card {
+        padding: 28px 18px 22px;
+    }
+    
+    .category-card .category-icon {
+        font-size: 36px;
+    }
+    
+    .category-card h3 {
+        font-size: 17px;
+    }
+    
+    .category-card p {
+        font-size: 13px;
+    }
+    
+    /* Contact Homepage */
+    .contact {
+        padding: 30px 0 20px;
+    }
+    
+    .contact h2 {
+        font-size: 24px;
+        margin-bottom: 12px;
+    }
+    
+    .contact p {
+        font-size: 14px;
+        margin-bottom: 4px;
+    }
+    
+    /* Contact Page */
+    .contact-page {
+        padding: 40px 20px;
+    }
+    
+    .contact-box {
+        padding: 30px 25px;
+    }
+    
+    .contact-box h2 {
+        font-size: 24px;
+        margin-bottom: 20px;
+    }
+    
+    .contact-item {
+        flex-direction: column;
+        text-align: center;
+        gap: 8px;
+        padding: 15px;
+    }
+    
+    .contact-icon {
+        font-size: 24px;
+    }
+    
+    .contact-item p {
+        font-size: 14px;
+    }
+    
+    /* WhatsApp */
+    .whatsapp-btn {
+        font-size: 14px !important;
+        padding: 12px 14px !important;
+    }
+    
+    .whatsapp-float {
+        width: 50px;
+        height: 50px;
+        font-size: 28px;
+        bottom: 20px;
+        right: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .category-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    
+    .category-card {
+        padding: 30px 20px 25px;
+    }
+    
+    .contact-box {
+        padding: 25px 18px;
+    }
+    
+    .contact-item {
+        padding: 12px;
+    }
+}

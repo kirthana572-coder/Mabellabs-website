@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Products - MABELLABS Malaysia</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/products.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+    <!-- ================= HEADER ================= -->
+    <header>
+        <div class="container">
+            <div class="logo">
+                <img src="images/mabellabs.png" alt="MABELLABS Malaysia">
+                <span class="company-name">Mabellabs Malaysia</span>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="index.html#about">About</a></li>
+                    <li><a href="products.html" class="active">Products</a></li>
+                    <li><a href="brands.html">Brands</a></li>
+                     <li><a href="faq.html">FAQ</a></li>
+                     <li><a href="distributor.html">Become Distributor</a></li>
+                      <li><a href="privacy-policy.html">Privacy Policy</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                    <li><a href="profile.html">My Profile</a></li>
+                    <li><a href="login.html">Login</a></li>
+
+                    
+                </ul>
+
+            </nav>
+        </div>
+    </header>
+
+    <!-- ================= CATEGORY GRID ================= -->
+    <section class="category-section" id="categorySection">
+        <div class="container">
+            <h2 class="section-title">Our Products</h2>
+            <p class="section-subtitle">Premium aesthetic & skin solutions</p>
+            <div class="category-grid">
+
+                <!-- Whitening -->
+                <div class="category-card" data-category="whitening" id="whitening">
+                    <div class="card-icon">✨</div>
+                    <h3>Whitening</h3>
+                    <p>Brightening solutions</p>
+                    <span class="product-count">6 Products</span>
+                </div>
+
+                <!-- Anti-Aging -->
+                <div class="category-card" data-category="antiaging" id="antiaging">
+                    <div class="card-icon">🌟</div>
+                    <h3>Anti-Aging</h3>
+                    <p>Youthful vitality</p>
+                    <span class="product-count">4 Products</span>
+                </div>
+
+                <!-- Stem Cell Therapy -->
+                <div class="category-card" data-category="stemcell" id="stemcell">
+                    <div class="card-icon">🧬</div>
+                    <h3>Stem Cell Therapy</h3>
+                    <p>Regenerative therapy</p>
+                    <span class="product-count">4 Products</span>
+                </div>
+
+                <!-- Supplements -->
+                <div class="category-card" data-category="supplements" id="supplements">
+                    <div class="card-icon">💊</div>
+                    <h3>Supplements</h3>
+                    <p>Health supplements</p>
+                    <span class="product-count">4 Products</span>
+                </div>
+
+                <!-- Wellness -->
+                <div class="category-card" data-category="wellness" id="wellness">
+                    <div class="card-icon">🌿</div>
+                    <h3>Wellness</h3>
+                    <p>Health & vitality</p>
+                    <span class="product-count">4 Products</span>
+                </div>
+
+                <!-- Slimming -->
+                <div class="category-card" data-category="slimming" id="slimming">
+                    <div class="card-icon">⚡</div>
+                    <h3>Slimming</h3>
+                    <p>Body contouring</p>
+                    <span class="product-count">4 Products</span>
+                </div>
+                
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ================= SEARCH BAR ================= -->
+    <section class="search-section">
+        <div class="container">
+            <div class="search-container">
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="🔍 Search products by name, brand, or category..." autocomplete="off">
+                    <button id="searchBtn">Search</button>
+                </div>
+                <div id="searchResults" class="search-results"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================= PRODUCTS DISPLAY ================= -->
+    <section class="products-display" id="productsDisplay" style="display: none;">
+        <div class="container">
+            <div class="display-header">
+                <button class="back-btn" id="backBtn">← Back</button>
+                <h2 id="displayTitle">Category</h2>
+                <p id="displayDesc">Category description</p>
+            </div>
+            <div class="products-grid" id="productsGrid">
+                <!-- Products loaded by JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- ================= CTA ================= -->
+    <section class="cta-section">
+        <div class="container">
+            <div class="cta-box">
+                <h2>Need Help?</h2>
+                <p>We're here to guide you</p>
+                <a href="contact.html" class="btn">Contact Us</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================= FOOTER ================= -->
+    <footer>
+        <p>© 2026 MABELLABS Malaysia. All Rights Reserved.</p>
+    </footer>
+
+    <script>
+        console.log('✅ HTML is loading!');
+        console.log('📦 About to load products.js');
+    </script>
+    <script src="js/products.js?v=2"></script>
+    <script>
+        console.log('✅ products.js should be loaded now');
+    </script>
+</body>
+
+</html>

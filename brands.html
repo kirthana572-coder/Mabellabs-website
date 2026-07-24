@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brands - MABELLABS Malaysia</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/brands.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+    <!-- ================= HEADER ================= -->
+    <header>
+        <div class="container">
+            <div class="logo">
+                <img src="images/mabellabs.png" alt="MABELLABS Malaysia">
+                <span class="company-name">Mabellabs Malaysia</span>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="index.html#about">About</a></li>
+                    <li><a href="products.html">Products</a></li>
+                    <li><a href="brands.html" class="active">Brands</a></li>
+                    <li><a href="faq.html">FAQ</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                    <li><a href="login.html">Login</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- ================= BRANDS HERO ================= -->
+    <section class="brands-hero">
+        <div class="container">
+            <h1>Our Brands</h1>
+            <p>Discover our trusted partner brands</p>
+        </div>
+    </section>
+
+    <!-- ================= BRANDS GRID ================= -->
+    <section class="brands-section" id="brandsSection">
+        <div class="container">
+            <div class="brands-grid">
+
+                <!-- Brand 1: Mabellabs Malaysia -->
+                <div class="brand-card" data-brand="mabellabs">
+                    <div class="brand-icon">🏷️</div>
+                    <h3>Mabellabs Malaysia</h3>
+                    <p>Premium aesthetic & wellness products</p>
+                    <span class="brand-count" id="count-mabellabs">0 Products</span>
+                </div>
+
+                <!-- Brand 2: 29 Nexentury -->
+                <div class="brand-card" data-brand="nexentury">
+                    <div class="brand-icon">🌟</div>
+                    <h3>29 Nexentury</h3>
+                    <p>Innovative skin solutions</p>
+                    <span class="brand-count" id="count-nexentury">0 Products</span>
+                </div>
+
+                <!-- Brand 3: Pure Pharma -->
+                <div class="brand-card" data-brand="purepharma">
+                    <div class="brand-icon">🔬</div>
+                    <h3>Pure Pharma</h3>
+                    <p>Pharmaceutical grade peptides</p>
+                    <span class="brand-count" id="count-purepharma">0 Products</span>
+                </div>
+
+                <!-- Brand 4: Gluta Therapy -->
+                <div class="brand-card" data-brand="glutatherapy">
+                    <div class="brand-icon">💉</div>
+                    <h3>Gluta Therapy</h3>
+                    <p>Advanced brightening therapy</p>
+                    <span class="brand-count" id="count-glutatherapy">0 Products</span>
+                </div>
+
+                <!-- Brand 5: OEM -->
+                <div class="brand-card" data-brand="oem">
+                    <div class="brand-icon">⚙️</div>
+                    <h3>OEM</h3>
+                    <p>Custom manufacturing solutions</p>
+                    <span class="brand-count" id="count-oem">0 Products</span>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ================= BRAND PRODUCTS DISPLAY ================= -->
+    <section class="brand-products-display" id="brandProductsDisplay" style="display: none;">
+        <div class="container">
+            <div class="brand-products-header">
+                <button class="back-btn" id="backToBrandsBtn">← Back to Brands</button>
+                <h2 id="brandDisplayTitle">Brand Name</h2>
+                <p id="brandDisplayDesc">Brand description</p>
+            </div>
+            <div class="brand-products-grid" id="brandProductsGrid">
+                <!-- Products loaded by JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- ================= FOOTER ================= -->
+    <footer>
+        <div class="container">
+            <div class="footer-links">
+                <a href="privacy-policy.html">Privacy Policy</a>
+                <span>|</span>
+                <a href="refund-policy.html">Refund Policy</a>
+                <span>|</span>
+                <a href="shipping-policy.html">Shipping Policy</a>
+            </div>
+            <p>© 2026 MABELLABS Malaysia. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <script src="js/brands.js"></script>
+</body>
+
+</html>

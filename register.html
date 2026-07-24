@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - MABELLABS Malaysia</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/auth.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+</head>
+
+<body>
+
+    <header>
+        <div class="container">
+            <div class="logo">
+                <img src="images/mabellabs.png" alt="MABELLABS Malaysia">
+                <span class="company-name">Mabellabs Malaysia</span>
+            </div>
+            <nav>
+                <ul id="mainNav">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="index.html#about">About</a></li>
+                    <li><a href="products.html">Products</a></li>
+                    <li><a href="brands.html">Brands</a></li>
+                    <li><a href="faq.html">FAQ</a></li>
+                    <li><a href="distributor.html">Become Distributor</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                    <li id="navLogin"><a href="login.html">Login</a></li>
+                    <li id="navRegister"><a href="register.html" class="active">Register</a></li>
+                    <li id="navCart"><a href="#" onclick="goToCart()">🛒 Cart</a></li>
+                    <li id="navProfile" style="display: none;"><a href="profile.html">👤 My Profile</a></li>
+                    <li id="navLogout" style="display: none;"><a href="#" onclick="logout()">🚪 Logout</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="auth-section">
+        <div class="container">
+            <div class="auth-box">
+                <div class="auth-header">
+                    <h2>Create Account</h2>
+                    <p>Join MABELLABS Malaysia today</p>
+                </div>
+
+                <div id="authMessage" class="auth-message"></div>
+
+                <form id="registerForm">
+                    <div class="form-group">
+                        <label for="regFullName">Full Name</label>
+                        <input type="text" id="regFullName" placeholder="Enter your full name" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="regEmail">Email Address</label>
+                        <input type="email" id="regEmail" placeholder="Enter your email" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="regPassword">Password</label>
+                        <input type="password" id="regPassword" placeholder="Create a password" required>
+                        <span class="toggle-password" onclick="togglePassword('regPassword')">👁️</span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="regConfirmPassword">Confirm Password</label>
+                        <input type="password" id="regConfirmPassword" placeholder="Confirm your password" required>
+                        <span class="toggle-password" onclick="togglePassword('regConfirmPassword')">👁️</span>
+                    </div>
+
+                    <div class="password-requirements">
+                        <p>Password must contain:</p>
+                        <ul>
+                            <li id="req-length">✓ At least 8 characters</li>
+                            <li id="req-uppercase">✓ At least 1 uppercase letter</li>
+                            <li id="req-lowercase">✓ At least 1 lowercase letter</li>
+                            <li id="req-number">✓ At least 1 number</li>
+                            <li id="req-special">✓ At least 1 special character</li>
+                        </ul>
+                    </div>
+
+                    <div class="form-options">
+                        <label class="terms">
+                            <input type="checkbox" required> I agree to the <a href="privacy-policy.html">Terms & Conditions</a>
+                        </label>
+                    </div>
+
+                    <button type="submit" class="auth-btn" id="registerBtn">Create Account</button>
+                </form>
+
+                <p class="auth-footer">
+                    Already have an account? <a href="login.html">Login here</a>
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-links">
+            <a href="privacy-policy.html">Privacy Policy</a>
+            <span>|</span>
+            <a href="refund-policy.html">Refund Policy</a>
+            <span>|</span>
+            <a href="shipping-policy.html">Shipping Policy</a>
+        </div>
+        <p>© 2026 MABELLABS Malaysia. All Rights Reserved.</p>
+    </footer>
+
+    <script src="js/auth.js"></script>
+</body>
+
+</html>

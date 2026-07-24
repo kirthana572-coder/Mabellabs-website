@@ -1,0 +1,304 @@
+/* ================= BRANDS PAGE ================= */
+
+/* Brands Hero */
+.brands-hero {
+    background: linear-gradient(135deg, #7A210C, #B5482D);
+    padding: 60px 0 50px;
+    text-align: center;
+    color: white;
+}
+
+.brands-hero h1 {
+    font-size: 36px;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.brands-hero p {
+    font-size: 16px;
+    opacity: 0.85;
+}
+
+/* ================= BRANDS SECTION ================= */
+.brands-section {
+    padding: 60px 0 80px;
+    background: #f8f8f8;
+}
+
+.brands-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 25px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Brand Card */
+.brand-card {
+    background: white;
+    border-radius: 16px;
+    padding: 35px 25px 30px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    border: 2px solid transparent;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+    position: relative;
+    overflow: hidden;
+}
+
+.brand-card:hover {
+    transform: translateY(-8px);
+    border-color: #7A210C;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1);
+}
+
+.brand-card::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(90deg, #7A210C, #B5482D);
+    transform: scaleX(0);
+    transition: transform 0.4s ease;
+}
+
+.brand-card:hover::after {
+    transform: scaleX(1);
+}
+
+.brand-icon {
+    font-size: 44px;
+    display: block;
+    margin-bottom: 12px;
+}
+
+.brand-card h3 {
+    font-size: 20px;
+    color: #1a1a1a;
+    font-weight: 600;
+    margin-bottom: 6px;
+}
+
+.brand-card p {
+    font-size: 14px;
+    color: #666;
+    line-height: 1.6;
+    margin-bottom: 14px;
+}
+
+.brand-count {
+    display: inline-block;
+    background: #f5f0ed;
+    color: #7A210C;
+    padding: 4px 16px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+/* ================= BRAND PRODUCTS DISPLAY ================= */
+.brand-products-display {
+    padding: 40px 0 80px;
+    background: #f8f8f8;
+}
+
+.brand-products-header {
+    margin-bottom: 35px;
+}
+
+.back-btn {
+    background: none;
+    border: none;
+    color: #7A210C;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: 'Poppins', sans-serif;
+    padding: 8px 0;
+    transition: color 0.3s;
+    margin-bottom: 12px;
+}
+
+.back-btn:hover {
+    color: #B5482D;
+}
+
+.brand-products-header h2 {
+    font-size: 30px;
+    color: #7A210C;
+    margin-bottom: 6px;
+}
+
+.brand-products-header p {
+    color: #666;
+    font-size: 15px;
+}
+
+/* Brand Products Grid */
+.brand-products-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 25px;
+}
+
+/* Product Card */
+.brand-product-card {
+    background: white;
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+    transition: all 0.3s ease;
+    border: 1px solid #f0f0f0;
+}
+
+.brand-product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 35px rgba(0, 0, 0, 0.1);
+    border-color: #e0d8d2;
+}
+
+.brand-product-card .product-image {
+    height: 170px;
+    background: linear-gradient(135deg, #f5f0ed, #ebe5e0);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 42px;
+    opacity: 0.5;
+}
+
+.brand-product-card .product-info {
+    padding: 16px 18px 20px;
+}
+
+.brand-product-card .product-info h3 {
+    font-size: 15px;
+    color: #1a1a1a;
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+.brand-product-card .product-info .product-desc {
+    font-size: 13px;
+    color: #666;
+    line-height: 1.5;
+    margin-bottom: 10px;
+}
+
+.brand-product-card .product-info .product-price {
+    font-size: 17px;
+    font-weight: 700;
+    color: #7A210C;
+    margin-bottom: 12px;
+}
+
+.brand-product-card .product-btn {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    background: #7A210C;
+    color: white;
+    text-align: center;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 13px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.brand-product-card .product-btn:hover {
+    background: #A73718;
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media (max-width: 1024px) {
+    .brands-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+    .brand-products-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .brands-hero {
+        padding: 40px 0 30px;
+    }
+    
+    .brands-hero h1 {
+        font-size: 28px;
+    }
+    
+    .brands-section {
+        padding: 40px 0 60px;
+    }
+    
+    .brands-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+    }
+    
+    .brand-card {
+        padding: 28px 18px 22px;
+    }
+    
+    .brand-icon {
+        font-size: 36px;
+    }
+    
+    .brand-card h3 {
+        font-size: 17px;
+    }
+    
+    .brand-products-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+    }
+    
+    .brand-product-card .product-image {
+        height: 140px;
+    }
+    
+    .brand-products-header h2 {
+        font-size: 24px;
+    }
+}
+
+@media (max-width: 480px) {
+    .brands-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    
+    .brand-products-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    
+    .brand-product-card .product-image {
+        height: 200px;
+    }
+}
+
+/* Product Image */
+.brand-product-card .product-image {
+    height: 170px;
+    background: linear-gradient(135deg, #f5f0ed, #ebe5e0);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 42px;
+    opacity: 0.5;
+    overflow: hidden;
+}
+
+.brand-product-card .product-image .product-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 1;
+}
