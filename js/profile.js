@@ -3,18 +3,13 @@
 document.addEventListener('DOMContentLoaded', function() {
     console.log('✅ Profile page loaded!');
 
-    // Check login status
-    const user = firebase.auth().currentUser;
-    
-    if (!user) {
-        alert('Please log in to access your profile.');
-        localStorage.setItem('redirectAfterLogin', 'profile.html');
-        window.location.href = 'login.html';
-        return;
-    }
-
-    console.log('👤 User logged in:', user.email);
-    loadUserProfile(user);
+    // Listen for auth state changes to get the logged-in user
+    firebase.auth().onAuthStateChanged((user) => {
+        if (user) {
+            console.log('👤 User logged in:', user.email);
+            loadUserProfile(user);
+        }
+    });
 });
 
 // ================= LOAD USER PROFILE =================

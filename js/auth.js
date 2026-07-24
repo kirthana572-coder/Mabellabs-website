@@ -280,6 +280,16 @@ function handleAuthState(user) {
     } else {
         localStorage.removeItem('currentUser');
         localStorage.removeItem('loginTimestamp');
+
+        // Redirect logged-out users away from protected pages
+        const protectedPages = ['profile.html', 'cart.html', 'checkout.html'];
+        const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+        if (protectedPages.includes(currentPage)) {
+            localStorage.setItem('redirectAfterLogin', currentPage);
+            alert('Please log in to access this page.');
+            window.location.href = 'login.html';
+            return;
+        }
     }
 
     // Normalize navigation dynamically so every page has the correct elements with correct IDs
@@ -585,20 +595,6 @@ window.logout = function () {
     }
 };
 
-// ================= PROTECT PAGES =================
 
-document.addEventListener('DOMContentLoaded', function () {
-    const protectedPages = ['profile.html', 'cart.html', 'checkout.html'];
-    const currentPage = window.location.pathname.split('/').pop();
-
-    if (protectedPages.includes(currentPage)) {
-        const user = firebase.auth().currentUser;
-        if (!user) {
-            localStorage.setItem('redirectAfterLogin', currentPage);
-            alert('Please log in to access this page.');
-            window.location.href = 'login.html';
-        }
-    }
-});
 
 console.log('✅ Auth system ready!');
