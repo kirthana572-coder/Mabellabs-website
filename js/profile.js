@@ -232,8 +232,12 @@ if (cancelPasswordBtn) {
     });
 }
 
-if (updatePasswordBtn) {
-    updatePasswordBtn.addEventListener('click', function() {
+const passwordChangeForm = document.getElementById('passwordChangeForm');
+
+if (passwordChangeForm) {
+    passwordChangeForm.addEventListener('submit', function(e) {
+        e.preventDefault(); // Prevent double-firing and page reload
+
         const currentPassword = document.getElementById('currentPassword').value;
         const newPassword = document.getElementById('newPassword').value;
         const confirmNewPassword = document.getElementById('confirmNewPassword').value;
@@ -267,21 +271,64 @@ if (updatePasswordBtn) {
                 showPasswordMessage('✅ Password updated successfully!', 'success');
                 passwordFormContainer.style.display = 'none';
                 changePasswordBtn.style.display = 'inline-block';
-                document.getElementById('currentPassword').value = '';
-                document.getElementById('newPassword').value = '';
-                document.getElementById('confirmNewPassword').value = '';
+                passwordChangeForm.reset();
                 btn.textContent = '✅ Update Password';
                 btn.disabled = false;
             })
             .catch((error) => {
                 let message = error.message;
-                if (error.code === 'auth/wrong-password' || error.code === 'auth/invalid-login-credentials') {
-                    message = 'Current password is incorrect.';
+                // auth/wrong-password is deprecated in Firebase SDK v9+
+                // The new unified code is auth/invalid-credential
+                if (
+                    error.code === 'auth/invalid-credential' ||
+                    error.code === 'auth/wrong-password'
+                ) {
+                    message = 'Current password is incorrect. Please try again.';
+                } else if (error.code === 'auth/too-many-requests') {
+                    message = 'Too many failed attempts. Please wait before trying again.';
+                } else if (error.code === 'auth/requires-recent-login') {
+                    message = 'Session expired. Please log out and log in again before changing your password.';
                 }
                 showPasswordMessage('❌ ' + message, 'error');
                 btn.textContent = '✅ Update Password';
                 btn.disabled = false;
             });
+    });
+}
+
+// ================= PROFILE FORGOT PASSWORD LINK =================
+
+const profileForgotPasswordLink = document.getElementById('profileForgotPasswordLink');
+
+if (profileForgotPasswordLink) {
+    profileForgotPasswordLink.addEventListener('click', async function (e) {
+        e.preventDefault();
+
+        const user = firebase.auth().currentUser;
+        if (!user || !user.email) {
+            showPasswordMessage('❌ Could not detect your email. Please log out and try again.', 'error');
+            return;
+        }
+
+        const confirmed = confirm(`Send a password reset link to:\n${user.email}\n\nCheck your inbox (and spam folder) after clicking OK.`);
+        if (!confirmed) return;
+
+        this.textContent = 'Sending...';
+        this.style.pointerEvents = 'none';
+
+        try {
+            await firebase.auth().sendPasswordResetEmail(user.email);
+            showPasswordMessage(`📧 Reset link sent to ${user.email}. Check your inbox and spam folder.`, 'success');
+        } catch (error) {
+            let message = error.message;
+            if (error.code === 'auth/too-many-requests') {
+                message = 'Too many requests. Please wait a moment before trying again.';
+            }
+            showPasswordMessage('❌ ' + message, 'error');
+        } finally {
+            this.textContent = 'Forgot your current password? Send me a reset link';
+            this.style.pointerEvents = 'auto';
+        }
     });
 }
 

@@ -373,19 +373,26 @@ document.addEventListener('DOMContentLoaded', function () {
         btn.disabled = true;
 
         try {
+            // Step 1: Create the user
             const userCredential = await firebase.auth().createUserWithEmailAndPassword(email, password);
             const user = userCredential.user;
 
-            // Update display name
+            // Step 2: Set display name BEFORE sending verification email
+            // (so Firebase can populate %DISPLAY_NAME% in the email template)
             await user.updateProfile({ displayName: fullname });
 
-            // Save to Firestore using UID as document ID
+            // Step 3: Send email verification
+            await user.sendEmailVerification();
+            console.log('📧 Verification email sent to:', user.email);
+
+            // Step 4: Save to Firestore
             await db.collection('users').doc(user.uid).set({
                 uid: user.uid,
                 fullname: fullname,
                 email: email,
                 phone: phone,
                 address: '',
+                emailVerified: false,
                 createdAt: firebase.firestore.FieldValue.serverTimestamp(),
                 updatedAt: firebase.firestore.FieldValue.serverTimestamp()
             });
@@ -397,6 +404,11 @@ document.addEventListener('DOMContentLoaded', function () {
             const successModal = document.getElementById('registerSuccessModal');
             const goToHomeBtn = document.getElementById('goToHomeBtn');
             if (successModal) {
+                // Update modal message if element exists
+                const modalMsg = successModal.querySelector('p');
+                if (modalMsg) {
+                    modalMsg.textContent = `Account created! We've sent a verification email to ${user.email}. Please check your inbox and spam folder.`;
+                }
                 successModal.style.display = 'flex';
                 if (goToHomeBtn) {
                     goToHomeBtn.addEventListener('click', function () {
@@ -404,7 +416,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     });
                 }
             } else {
-                alert('✅ Registration successful! Welcome to MABELLABS Malaysia.');
+                alert(`✅ Registration successful! A verification email has been sent to ${user.email}. Please verify your email before logging in.`);
                 window.location.href = 'index.html';
             }
 
@@ -415,12 +427,15 @@ document.addEventListener('DOMContentLoaded', function () {
                 message = 'This email is already registered. Please login.';
             } else if (error.code === 'auth/network-request-failed') {
                 message = 'Network error. Please check your internet connection.';
+            } else if (error.code === 'auth/too-many-requests') {
+                message = 'Too many requests. Please wait a moment and try again.';
             }
             alert('❌ ' + message);
         } finally {
             btn.textContent = 'Create Account';
             btn.disabled = false;
         }
+
     });
 });
 
@@ -550,26 +565,28 @@ document.addEventListener('DOMContentLoaded', function () {
                 return;
             }
 
-            const btn = forgotPasswordForm.querySelector('.auth-btn');
-            btn.textContent = 'Sending...';
+            const btn = document.getElementById('resetEmailBtn') || forgotPasswordForm.querySelector('.auth-btn');
+            btn.textContent = 'Sending email...';
             btn.disabled = true;
 
             try {
                 await firebase.auth().sendPasswordResetEmail(email);
-                alert('✅ A password reset link has been sent to your email.');
+                alert('📧 Reset link sent! Check your email inbox (and spam folder) for a link to reset your password.');
                 forgotPasswordModal.style.display = 'none';
                 forgotPasswordForm.reset();
             } catch (error) {
                 console.error('Password reset error:', error);
                 let message = error.message;
-                if (error.code === 'auth/user-not-found') {
-                    message = 'No account found with this email address.';
-                } else if (error.code === 'auth/invalid-email') {
+                // Note: 'auth/user-not-found' is deprecated in newer Firebase SDK.
+                // Firebase now silently succeeds even for unknown emails (prevents email enumeration).
+                if (error.code === 'auth/invalid-email') {
                     message = 'Invalid email address. Please enter a valid email.';
+                } else if (error.code === 'auth/too-many-requests') {
+                    message = 'Too many requests. Please wait a moment before trying again.';
                 }
                 alert('❌ ' + message);
             } finally {
-                btn.textContent = 'Send Reset Link';
+                btn.textContent = 'Send me a reset link';
                 btn.disabled = false;
             }
         });
