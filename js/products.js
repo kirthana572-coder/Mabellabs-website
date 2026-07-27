@@ -108,6 +108,9 @@ document.addEventListener('DOMContentLoaded', function() {
         if (p.priceOld) priceHtml += ` <span class="price-old">${p.priceOld}</span>`;
         let badgeHtml = p.badge ? `<span class="product-badge ${p.badgeClass}">${p.badge}</span>` : '';
 
+        // Clean price for addToCart function (remove "RM " and commas)
+            const cleanPrice = parseFloat(p.price.replace(/[RM,]/g, '').trim());
+
         html += `
             <div class="product-card">
                 <div class="product-image">
@@ -126,6 +129,13 @@ document.addEventListener('DOMContentLoaded', function() {
                         <span class="product-status available">In Stock</span>
                     </div>
                     <div class="product-price">${priceHtml}</div>
+
+                    <!-- ✅ ADD TO CART BUTTON - ADD THIS HERE -->
+                    <button class="add-to-cart-btn" 
+                            onclick="addToCart('${p.sku}', '${p.name.replace(/'/g, "\\'")}', ${cleanPrice}, '${p.image || ''}')">
+                        🛒 Add to Cart
+                    </button>
+                    
                     <a href="product-detail.html?id=${p.sku}" class="product-btn">View Details →</a>
                 </div>
             </div>

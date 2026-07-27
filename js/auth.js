@@ -89,7 +89,7 @@ function renderNavbarComponent() {
                 <span class="company-name">Mabellabs Malaysia</span>
             </div>
             <nav>
-                <ul>
+                <ul id="mainNav">
                     <li><a href="index.html"${currentPage === 'index.html' ? ' class="active"' : ''}>Home</a></li>
                     <li><a href="index.html#about">About</a></li>
                     <li><a href="products.html"${currentPage === 'products.html' || currentPage === 'product-detail.html' ? ' class="active"' : ''}>Products</a></li>
@@ -104,16 +104,23 @@ function renderNavbarComponent() {
 }
 
 function normalizeNavbar() {
-    // 1. Render the standard header layout
     renderNavbarComponent();
 
-    // 2. Retrieve the dynamically rendered list container
-    const navUl = document.querySelector('header nav ul') || document.querySelector('nav ul');
-    if (!navUl) return;
+    const navUl = document.querySelector('#mainNav') || document.querySelector('header nav ul') || document.querySelector('nav ul');
+    if (!navUl) {
+        console.error('❌ Could not find navigation ul');
+        return;
+    }
 
     const currentPage = window.location.pathname.split('/').pop() || 'index.html';
 
-    // 3. Append standardized dynamic items
+    // Remove existing dynamic items to avoid duplicates
+    const existingIds = ['navCart', 'navProfile', 'navLogout', 'navLogin', 'navRegister'];
+    existingIds.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.remove();
+    });
+
     // Cart
     const liCart = document.createElement('li');
     liCart.id = 'navCart';
@@ -141,7 +148,7 @@ function normalizeNavbar() {
     // Login
     const liLogin = document.createElement('li');
     liLogin.id = 'navLogin';
-    liLogin.style.display = 'none'; // Hide initially until auth state resolved
+    liLogin.style.display = 'none';
     const loginActive = currentPage === 'login.html' ? ' class="active"' : '';
     liLogin.innerHTML = `<a href="login.html"${loginActive}>Login</a>`;
     navUl.appendChild(liLogin);
@@ -149,10 +156,12 @@ function normalizeNavbar() {
     // Register
     const liRegister = document.createElement('li');
     liRegister.id = 'navRegister';
-    liRegister.style.display = 'none'; // Hide initially until auth state resolved
+    liRegister.style.display = 'none';
     const registerActive = currentPage === 'register.html' ? ' class="active"' : '';
     liRegister.innerHTML = `<a href="register.html"${registerActive}>Register</a>`;
     navUl.appendChild(liRegister);
+
+    console.log('✅ Navigation normalized');
 }
 
 document.addEventListener('DOMContentLoaded', normalizeNavbar);
@@ -167,7 +176,6 @@ function updateNavigation(user) {
     const navCart = document.getElementById('navCart');
 
     if (user) {
-        // User is logged in
         if (navLogin) navLogin.style.display = 'none';
         if (navRegister) navRegister.style.display = 'none';
         if (navProfile) {
@@ -181,7 +189,6 @@ function updateNavigation(user) {
                 avatarLink.onclick = null;
             }
 
-            // Check Firestore for a custom profile picture
             db.collection('users').doc(user.uid).get().then(doc => {
                 if (doc.exists && doc.data().photoURL) {
                     const avatarLink = navProfile.querySelector('a');
@@ -202,12 +209,11 @@ function updateNavigation(user) {
             }
         }
         if (navCart) {
-            navCart.innerHTML = '<a href="cart.html">🛒 Cart</a>';
+            navCart.innerHTML = '<a href="#" onclick="goToCart()">🛒 Cart</a>';
         }
 
         console.log('👤 Navigation: Logged in as', user.displayName || user.email);
     } else {
-        // User is logged out
         if (navLogin) navLogin.style.display = 'inline-block';
         if (navRegister) navRegister.style.display = 'inline-block';
         if (navProfile) {
@@ -239,7 +245,6 @@ function updateNavigation(user) {
 firebase.auth().onAuthStateChanged((user) => {
     currentUser = user;
 
-    // Ensure DOM is ready before modifying it
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', () => handleAuthState(user));
     } else {
@@ -249,7 +254,6 @@ firebase.auth().onAuthStateChanged((user) => {
 
 function handleAuthState(user) {
     if (user) {
-        // Enforce 1 week timeout (7 days in milliseconds)
         const oneWeekMs = 7 * 24 * 60 * 60 * 1000;
         const loginTimestamp = localStorage.getItem('loginTimestamp');
         const now = Date.now();
@@ -267,7 +271,6 @@ function handleAuthState(user) {
                 return;
             }
         } else {
-            // First time detecting login or session marker missing
             localStorage.setItem('loginTimestamp', now.toString());
         }
 
@@ -281,7 +284,6 @@ function handleAuthState(user) {
         localStorage.removeItem('currentUser');
         localStorage.removeItem('loginTimestamp');
 
-        // Redirect logged-out users away from protected pages
         const protectedPages = ['profile.html', 'cart.html', 'checkout.html'];
         const currentPage = window.location.pathname.split('/').pop() || 'index.html';
         if (protectedPages.includes(currentPage)) {
@@ -292,7 +294,6 @@ function handleAuthState(user) {
         }
     }
 
-    // Normalize navigation dynamically so every page has the correct elements with correct IDs
     normalizeNavbar();
     updateNavigation(user);
 }
@@ -330,7 +331,6 @@ document.addEventListener('DOMContentLoaded', function () {
     const registerForm = document.getElementById('registerForm');
     if (!registerForm) return;
 
-    // Password validation on input
     const passwordField = document.getElementById('regPassword');
     if (passwordField) {
         passwordField.addEventListener('input', function () {
@@ -347,7 +347,6 @@ document.addEventListener('DOMContentLoaded', function () {
         const password = document.getElementById('regPassword').value;
         const confirmPassword = document.getElementById('regConfirmPassword').value;
 
-        // Validation
         if (!fullname || !email || !phone || !password || !confirmPassword) {
             alert('Please fill in all fields');
             return;
@@ -373,52 +372,25 @@ document.addEventListener('DOMContentLoaded', function () {
         btn.disabled = true;
 
         try {
-            // Step 1: Create the user
             const userCredential = await firebase.auth().createUserWithEmailAndPassword(email, password);
             const user = userCredential.user;
 
-            // Step 2: Set display name BEFORE sending verification email
-            // (so Firebase can populate %DISPLAY_NAME% in the email template)
             await user.updateProfile({ displayName: fullname });
 
-            // Step 3: Send email verification
-            await user.sendEmailVerification();
-            console.log('📧 Verification email sent to:', user.email);
-
-            // Step 4: Save to Firestore
             await db.collection('users').doc(user.uid).set({
                 uid: user.uid,
                 fullname: fullname,
                 email: email,
                 phone: phone,
                 address: '',
-                emailVerified: false,
                 createdAt: firebase.firestore.FieldValue.serverTimestamp(),
                 updatedAt: firebase.firestore.FieldValue.serverTimestamp()
             });
 
-            // Set login timestamp for 1-week timeout
             localStorage.setItem('loginTimestamp', Date.now().toString());
 
-            // Show custom success modal and redirect to home
-            const successModal = document.getElementById('registerSuccessModal');
-            const goToHomeBtn = document.getElementById('goToHomeBtn');
-            if (successModal) {
-                // Update modal message if element exists
-                const modalMsg = successModal.querySelector('p');
-                if (modalMsg) {
-                    modalMsg.textContent = `Account created! We've sent a verification email to ${user.email}. Please check your inbox and spam folder.`;
-                }
-                successModal.style.display = 'flex';
-                if (goToHomeBtn) {
-                    goToHomeBtn.addEventListener('click', function () {
-                        window.location.href = 'index.html';
-                    });
-                }
-            } else {
-                alert(`✅ Registration successful! A verification email has been sent to ${user.email}. Please verify your email before logging in.`);
-                window.location.href = 'index.html';
-            }
+            alert('✅ Registration successful! Welcome to MABELLABS Malaysia.');
+            window.location.href = 'index.html';
 
         } catch (error) {
             console.error('Registration error:', error);
@@ -427,15 +399,12 @@ document.addEventListener('DOMContentLoaded', function () {
                 message = 'This email is already registered. Please login.';
             } else if (error.code === 'auth/network-request-failed') {
                 message = 'Network error. Please check your internet connection.';
-            } else if (error.code === 'auth/too-many-requests') {
-                message = 'Too many requests. Please wait a moment and try again.';
             }
             alert('❌ ' + message);
         } finally {
             btn.textContent = 'Create Account';
             btn.disabled = false;
         }
-
     });
 });
 
@@ -445,7 +414,6 @@ document.addEventListener('DOMContentLoaded', function () {
     const loginForm = document.getElementById('loginForm');
     if (!loginForm) return;
 
-    // Remember Me
     const rememberMe = document.getElementById('rememberMe');
     const savedEmail = localStorage.getItem('rememberedEmail');
     if (savedEmail && rememberMe) {
@@ -472,22 +440,18 @@ document.addEventListener('DOMContentLoaded', function () {
             const userCredential = await firebase.auth().signInWithEmailAndPassword(email, password);
             const user = userCredential.user;
 
-            // Save "Remember Me" email
             if (rememberMe && rememberMe.checked) {
                 localStorage.setItem('rememberedEmail', email);
             } else {
                 localStorage.removeItem('rememberedEmail');
             }
 
-            // Set login timestamp for 1-week timeout
             localStorage.setItem('loginTimestamp', Date.now().toString());
 
-            // Update navigation immediately
             updateNavigation(user);
 
             alert('✅ Login successful! Welcome back!');
 
-            // Check redirect URL
             const redirectUrl = localStorage.getItem('redirectAfterLogin');
             setTimeout(() => {
                 if (redirectUrl) {
@@ -565,28 +529,26 @@ document.addEventListener('DOMContentLoaded', function () {
                 return;
             }
 
-            const btn = document.getElementById('resetEmailBtn') || forgotPasswordForm.querySelector('.auth-btn');
-            btn.textContent = 'Sending email...';
+            const btn = forgotPasswordForm.querySelector('.auth-btn');
+            btn.textContent = 'Sending...';
             btn.disabled = true;
 
             try {
                 await firebase.auth().sendPasswordResetEmail(email);
-                alert('📧 Reset link sent! Check your email inbox (and spam folder) for a link to reset your password.');
+                alert('✅ A password reset link has been sent to your email.');
                 forgotPasswordModal.style.display = 'none';
                 forgotPasswordForm.reset();
             } catch (error) {
                 console.error('Password reset error:', error);
                 let message = error.message;
-                // Note: 'auth/user-not-found' is deprecated in newer Firebase SDK.
-                // Firebase now silently succeeds even for unknown emails (prevents email enumeration).
-                if (error.code === 'auth/invalid-email') {
+                if (error.code === 'auth/user-not-found') {
+                    message = 'No account found with this email address.';
+                } else if (error.code === 'auth/invalid-email') {
                     message = 'Invalid email address. Please enter a valid email.';
-                } else if (error.code === 'auth/too-many-requests') {
-                    message = 'Too many requests. Please wait a moment before trying again.';
                 }
                 alert('❌ ' + message);
             } finally {
-                btn.textContent = 'Send me a reset link';
+                btn.textContent = 'Send Reset Link';
                 btn.disabled = false;
             }
         });
@@ -611,7 +573,5 @@ window.logout = function () {
             });
     }
 };
-
-
 
 console.log('✅ Auth system ready!');

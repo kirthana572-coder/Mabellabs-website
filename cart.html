@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Cart - MABELLABS Malaysia</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/cart.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+</head>
+
+<body>
+
+    <header>
+        <div class="container">
+            <div class="logo">
+                <img src="images/mabellabs.png" alt="MABELLABS Malaysia">
+                <span class="company-name">Mabellabs Malaysia</span>
+            </div>
+            <nav>
+                <ul id="mainNav">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="index.html#about">About</a></li>
+                    <li><a href="products.html">Products</a></li>
+                    <li><a href="brands.html">Brands</a></li>
+                    <li><a href="faq.html">FAQ</a></li>
+                    <li><a href="distributor.html">Become Distributor</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                    <li id="navLogin"><a href="login.html">Login</a></li>
+                    <li id="navRegister"><a href="register.html">Register</a></li>
+                    <li id="navCart"><a href="#" onclick="goToCart()" class="active">🛒 Cart</a></li>
+                    <li id="navProfile" style="display: none;"><a href="profile.html">👤 My Profile</a></li>
+                    <li id="navLogout" style="display: none;"><a href="#" onclick="logout()">🚪 Logout</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="cart-section">
+        <div class="container">
+            <h1 class="cart-title">🛒 Your Cart</h1>
+            
+            <div id="emptyCartMessage" class="empty-cart" style="display: none;">
+                <div class="empty-cart-icon">🛒</div>
+                <h2>Your cart is empty</h2>
+                <p>Browse our products and add items to your cart.</p>
+                <a href="products.html" class="btn">Start Shopping</a>
+            </div>
+            
+            <div id="cartItems" class="cart-items">
+                <!-- Cart items will be loaded here -->
+            </div>
+            
+            <div id="cartSummary" class="cart-summary">
+                <div class="cart-total">
+                    <span>Total:</span>
+                    <span id="cartTotal">RM 0.00</span>
+                </div>
+                <button class="checkout-btn" onclick="checkout()">Proceed to Checkout</button>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-links">
+            <a href="privacy-policy.html">Privacy Policy</a>
+            <span>|</span>
+            <a href="refund-policy.html">Refund Policy</a>
+            <span>|</span>
+            <a href="shipping-policy.html">Shipping Policy</a>
+        </div>
+        <p>© 2026 MABELLABS Malaysia. All Rights Reserved.</p>
+    </footer>
+
+    <!-- ===== SCRIPTS - MUST BE IN THIS ORDER ===== -->
+    <script src="js/auth.js"></script>
+    <script src="js/cart.js"></script>
+    
+    <!-- Load cart on page load -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🛒 Cart page loaded');
+            // Check if user is logged in before loading cart
+            const user = firebase.auth().currentUser;
+            if (user) {
+                console.log('👤 User logged in:', user.email);
+                loadCart();
+            } else {
+                console.log('❌ No user logged in - redirecting');
+                localStorage.setItem('redirectAfterLogin', 'cart.html');
+                alert('Please log in to view your cart.');
+                window.location.href = 'login.html';
+            }
+        });
+    </script>
+</body>
+
+</html>
