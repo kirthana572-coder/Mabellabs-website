@@ -4,10 +4,10 @@
 // ================= CART FUNCTIONS =================
 
 // Add product to cart
-window.addToCart = function(productId, productName, productPrice, productImage) {
+window.addToCart = function (productId, productName, productPrice, productImage) {
     // Check if user is logged in
     const user = firebase.auth().currentUser;
-    
+
     if (!user) {
         // Save the product details to add after login
         localStorage.setItem('pendingProduct', JSON.stringify({
@@ -17,12 +17,12 @@ window.addToCart = function(productId, productName, productPrice, productImage) 
             productImage: productImage
         }));
         localStorage.setItem('redirectAfterLogin', 'cart.html');
-        
+
         alert('Please log in or create an account to add items to your cart.');
         window.location.href = 'login.html';
         return;
     }
-    
+
     // User is logged in - add to cart
     addToCartFirestore(user.uid, productId, productName, productPrice, productImage);
 };
@@ -31,10 +31,10 @@ window.addToCart = function(productId, productName, productPrice, productImage) 
 async function addToCartFirestore(uid, productId, productName, productPrice, productImage) {
     try {
         const cartRef = firebase.firestore().collection('users').doc(uid).collection('cart');
-        
+
         // Check if product already exists in cart
         const existingDoc = await cartRef.doc(productId).get();
-        
+
         if (existingDoc.exists) {
             // Update quantity
             const currentQty = existingDoc.data().quantity || 1;
@@ -54,13 +54,13 @@ async function addToCartFirestore(uid, productId, productName, productPrice, pro
                 updatedAt: firebase.firestore.FieldValue.serverTimestamp()
             });
         }
-        
+
         alert('✅ Product added to cart successfully!');
         console.log('✅ Product added to cart:', productName);
-        
+
         // Update cart count in navigation
         updateCartCount(uid);
-        
+
     } catch (error) {
         console.error('❌ Error adding to cart:', error);
         alert('❌ Error adding to cart: ' + error.message);
@@ -74,7 +74,7 @@ async function updateCartCount(uid) {
         const cartRef = firebase.firestore().collection('users').doc(uid).collection('cart');
         const snapshot = await cartRef.get();
         const count = snapshot.size;
-        
+
         const navCart = document.getElementById('navCart');
         if (navCart) {
             navCart.innerHTML = `<a href="#" onclick="goToCart()">🛒 Cart (${count})</a>`;
@@ -86,12 +86,14 @@ async function updateCartCount(uid) {
 
 // ================= LOAD CART PAGE =================
 
-window.loadCart = async function() {
+window.loadCart = async function () {
     console.log('🛒 Loading cart...');
-    
+
+    // currentUser can be null if Firebase hasn't resolved the session yet.
+    // Always call loadCart from inside onAuthStateChanged to avoid this.
     const user = firebase.auth().currentUser;
     console.log('👤 Current user:', user ? user.email : 'No user');
-    
+
     if (!user) {
         console.log('❌ No user logged in - redirecting to login');
         localStorage.setItem('redirectAfterLogin', 'cart.html');
@@ -99,39 +101,40 @@ window.loadCart = async function() {
         window.location.href = 'login.html';
         return;
     }
-    
+
+
     const cartContainer = document.getElementById('cartItems');
     const cartTotal = document.getElementById('cartTotal');
     const emptyMessage = document.getElementById('emptyCartMessage');
-    
+
     if (!cartContainer) {
         console.error('❌ cartContainer element not found!');
         return;
     }
-    
+
     try {
         const cartRef = firebase.firestore().collection('users').doc(user.uid).collection('cart');
         const snapshot = await cartRef.get();
-        
+
         console.log('📄 Cart items found:', snapshot.size);
-        
+
         if (snapshot.empty) {
             cartContainer.innerHTML = '';
             if (emptyMessage) emptyMessage.style.display = 'block';
             if (cartTotal) cartTotal.textContent = 'RM 0.00';
             return;
         }
-        
+
         if (emptyMessage) emptyMessage.style.display = 'none';
-        
+
         let total = 0;
         let html = '';
-        
+
         snapshot.forEach(doc => {
             const item = doc.data();
             const subtotal = item.productPrice * item.quantity;
             total += subtotal;
-            
+
             html += `
                 <div class="cart-item" data-product-id="${item.productId}">
                     <div class="cart-item-image">
@@ -153,13 +156,13 @@ window.loadCart = async function() {
                 </div>
             `;
         });
-        
+
         cartContainer.innerHTML = html;
         if (cartTotal) cartTotal.textContent = `RM ${total.toFixed(2)}`;
-        
+
         // Update cart count
         updateCartCount(user.uid);
-        
+
     } catch (error) {
         console.error('❌ Error loading cart:', error);
         alert('Error loading cart: ' + error.message);
@@ -168,18 +171,18 @@ window.loadCart = async function() {
 
 // ================= UPDATE QUANTITY =================
 
-window.updateQuantity = async function(productId, change) {
+window.updateQuantity = async function (productId, change) {
     const user = firebase.auth().currentUser;
     if (!user) return;
-    
+
     try {
         const cartRef = firebase.firestore().collection('users').doc(user.uid).collection('cart').doc(productId);
         const doc = await cartRef.get();
-        
+
         if (doc.exists) {
             const currentQty = doc.data().quantity || 1;
             const newQty = currentQty + change;
-            
+
             if (newQty <= 0) {
                 await removeFromCart(productId);
             } else {
@@ -188,7 +191,7 @@ window.updateQuantity = async function(productId, change) {
                     updatedAt: firebase.firestore.FieldValue.serverTimestamp()
                 });
             }
-            
+
             // Reload cart
             loadCart();
         }
@@ -199,12 +202,12 @@ window.updateQuantity = async function(productId, change) {
 
 // ================= REMOVE FROM CART =================
 
-window.removeFromCart = async function(productId) {
+window.removeFromCart = async function (productId) {
     if (!confirm('Remove this item from your cart?')) return;
-    
+
     const user = firebase.auth().currentUser;
     if (!user) return;
-    
+
     try {
         await firebase.firestore().collection('users').doc(user.uid).collection('cart').doc(productId).delete();
         console.log('✅ Item removed from cart');
@@ -217,14 +220,14 @@ window.removeFromCart = async function(productId) {
 
 // ================= CHECKOUT =================
 
-window.checkout = function() {
+window.checkout = function () {
     const user = firebase.auth().currentUser;
     if (!user) {
         alert('Please log in to checkout.');
         window.location.href = 'login.html';
         return;
     }
-    
+
     alert('🛒 Checkout functionality coming soon!');
     // window.location.href = 'checkout.html';
 };
