@@ -201,6 +201,100 @@ if (profileForm) {
     });
 }
 
+// ================================================================
+// ✅ NEW: PASSWORD VALIDATION FUNCTION
+// Checks password against requirements and updates UI
+// ================================================================
+
+function validateNewPassword(password) {
+    // Define password requirements
+    const requirements = {
+        length: password.length >= 8,
+        uppercase: /[A-Z]/.test(password),
+        lowercase: /[a-z]/.test(password),
+        number: /[0-9]/.test(password),
+        special: /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password)
+    };
+    
+    // Get requirement elements
+    const reqLength = document.getElementById('pwd-req-length');
+    const reqUppercase = document.getElementById('pwd-req-uppercase');
+    const reqLowercase = document.getElementById('pwd-req-lowercase');
+    const reqNumber = document.getElementById('pwd-req-number');
+    const reqSpecial = document.getElementById('pwd-req-special');
+    
+    // Update each requirement with valid/invalid class and emoji
+    if (reqLength) {
+        reqLength.className = requirements.length ? 'valid' : 'invalid';
+        reqLength.textContent = requirements.length ? '✅ At least 8 characters' : '❌ At least 8 characters';
+    }
+    if (reqUppercase) {
+        reqUppercase.className = requirements.uppercase ? 'valid' : 'invalid';
+        reqUppercase.textContent = requirements.uppercase ? '✅ At least 1 uppercase letter' : '❌ At least 1 uppercase letter';
+    }
+    if (reqLowercase) {
+        reqLowercase.className = requirements.lowercase ? 'valid' : 'invalid';
+        reqLowercase.textContent = requirements.lowercase ? '✅ At least 1 lowercase letter' : '❌ At least 1 lowercase letter';
+    }
+    if (reqNumber) {
+        reqNumber.className = requirements.number ? 'valid' : 'invalid';
+        reqNumber.textContent = requirements.number ? '✅ At least 1 number' : '❌ At least 1 number';
+    }
+    if (reqSpecial) {
+        reqSpecial.className = requirements.special ? 'valid' : 'invalid';
+        reqSpecial.textContent = requirements.special ? '✅ At least 1 special character' : '❌ At least 1 special character';
+    }
+    
+    // Return true if all requirements are met
+    return Object.values(requirements).every(Boolean);
+}
+
+// ================================================================
+// ✅ NEW: TOGGLE PASSWORD VISIBILITY FUNCTION
+// Toggles between showing and hiding password text
+// ================================================================
+
+function togglePasswordVisibility(fieldId) {
+    const field = document.getElementById(fieldId);
+    if (!field) return;
+    
+    // Find the toggle icon inside the same wrapper
+    const icon = field.parentElement.querySelector('.toggle-password-icon');
+    
+    if (field.type === 'password') {
+        // Show password
+        field.type = 'text';
+        if (icon) {
+            // Change to eye-off icon (crossed eye)
+            icon.innerHTML = `
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/>
+                    <line x1="1" y1="1" x2="23" y2="23"/>
+                </svg>
+            `;
+        }
+    } else {
+        // Hide password
+        field.type = 'password';
+        if (icon) {
+            // Change to eye icon
+            icon.innerHTML = `
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                    <circle cx="12" cy="12" r="3"/>
+                </svg>
+            `;
+        }
+    }
+}
+
+// ================================================================
+// ✅ NEW: MAKE TOGGLE FUNCTION AVAILABLE GLOBALLY
+// Required for onclick in HTML
+// ================================================================
+
+window.togglePasswordVisibility = togglePasswordVisibility;
+
 // ================= CHANGE PASSWORD =================
 
 const changePasswordBtn = document.getElementById('changePasswordBtn');
@@ -209,6 +303,11 @@ const passwordFormContainer = document.getElementById('passwordFormContainer');
 const updatePasswordBtn = document.getElementById('updatePasswordBtn');
 const passwordMessage = document.getElementById('passwordMessage');
 
+// ================================================================
+// ✅ UPDATED: Change Password Button Click
+// Opens form and resets requirement indicators
+// ================================================================
+
 if (changePasswordBtn) {
     changePasswordBtn.addEventListener('click', function() {
         passwordFormContainer.style.display = 'block';
@@ -216,6 +315,24 @@ if (changePasswordBtn) {
         passwordMessage.textContent = '';
         passwordMessage.className = 'password-message';
         passwordMessage.style.display = 'none';
+        
+        // Clear previous values
+        document.getElementById('currentPassword').value = '';
+        document.getElementById('newPassword').value = '';
+        document.getElementById('confirmNewPassword').value = '';
+        
+        // ================================================================
+        // ✅ NEW: Reset password requirements to default state
+        // ================================================================
+        const reqs = ['pwd-req-length', 'pwd-req-uppercase', 'pwd-req-lowercase', 'pwd-req-number', 'pwd-req-special'];
+        reqs.forEach(id => {
+            const el = document.getElementById(id);
+            if (el) {
+                el.className = '';
+                // Remove emoji prefix and show clean text
+                el.textContent = el.textContent.replace(/[✅❌] /, '');
+            }
+        });
     });
 }
 
@@ -232,11 +349,28 @@ if (cancelPasswordBtn) {
     });
 }
 
+// ================================================================
+// ✅ NEW: Real-time password validation on input
+// Updates requirements as user types
+// ================================================================
+
+const newPasswordField = document.getElementById('newPassword');
+if (newPasswordField) {
+    newPasswordField.addEventListener('input', function() {
+        validateNewPassword(this.value);
+    });
+}
+
+// ================================================================
+// ✅ UPDATED: Password Change Form Submit
+// Includes password requirements validation
+// ================================================================
+
 const passwordChangeForm = document.getElementById('passwordChangeForm');
 
 if (passwordChangeForm) {
     passwordChangeForm.addEventListener('submit', function(e) {
-        e.preventDefault(); // Prevent double-firing and page reload
+        e.preventDefault();
 
         const currentPassword = document.getElementById('currentPassword').value;
         const newPassword = document.getElementById('newPassword').value;
@@ -244,6 +378,14 @@ if (passwordChangeForm) {
 
         if (!currentPassword || !newPassword || !confirmNewPassword) {
             showPasswordMessage('Please fill in all fields.', 'error');
+            return;
+        }
+
+        // ================================================================
+        // ✅ NEW: Check password requirements before submitting
+        // ================================================================
+        if (!validateNewPassword(newPassword)) {
+            showPasswordMessage('Please meet all password requirements.', 'error');
             return;
         }
 
@@ -258,12 +400,16 @@ if (passwordChangeForm) {
         }
 
         const user = firebase.auth().currentUser;
-        if (!user) return;
+        if (!user) {
+            showPasswordMessage('You must be logged in to change your password.', 'error');
+            return;
+        }
 
         const btn = updatePasswordBtn;
         btn.textContent = 'Updating...';
         btn.disabled = true;
 
+        // Re-authenticate user before changing password
         const credential = firebase.auth.EmailAuthProvider.credential(user.email, currentPassword);
         user.reauthenticateWithCredential(credential)
             .then(() => user.updatePassword(newPassword))
@@ -272,13 +418,11 @@ if (passwordChangeForm) {
                 passwordFormContainer.style.display = 'none';
                 changePasswordBtn.style.display = 'inline-block';
                 passwordChangeForm.reset();
-                btn.textContent = '✅ Update Password';
+                btn.textContent = 'Update Password';
                 btn.disabled = false;
             })
             .catch((error) => {
                 let message = error.message;
-                // auth/wrong-password is deprecated in Firebase SDK v9+
-                // The new unified code is auth/invalid-credential
                 if (
                     error.code === 'auth/invalid-credential' ||
                     error.code === 'auth/wrong-password'
@@ -290,7 +434,7 @@ if (passwordChangeForm) {
                     message = 'Session expired. Please log out and log in again before changing your password.';
                 }
                 showPasswordMessage('❌ ' + message, 'error');
-                btn.textContent = '✅ Update Password';
+                btn.textContent = 'Update Password';
                 btn.disabled = false;
             });
     });

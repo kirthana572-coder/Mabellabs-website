@@ -73,6 +73,8 @@ function validatePassword(password) {
     return Object.values(requirements).every(Boolean);
 }
 
+// ================= RENDER NAVBAR =================
+
 function renderNavbarComponent() {
     const header = document.querySelector('header');
     if (!header) return;
@@ -103,10 +105,12 @@ function renderNavbarComponent() {
     `;
 }
 
+// ================= NORMALIZE NAVBAR =================
+
 function normalizeNavbar() {
     renderNavbarComponent();
 
-    const navUl = document.querySelector('#mainNav') || document.querySelector('header nav ul') || document.querySelector('nav ul');
+    const navUl = document.querySelector('#mainNav');
     if (!navUl) {
         console.error('❌ Could not find navigation ul');
         return;
@@ -121,44 +125,60 @@ function normalizeNavbar() {
         if (el) el.remove();
     });
 
-    // Cart
+    // ================================================================
+    // CART - Always show (no emoji, just text)
+    // ================================================================
     const liCart = document.createElement('li');
     liCart.id = 'navCart';
-    liCart.innerHTML = `<a href="#" onclick="goToCart()">🛒 Cart</a>`;
+    liCart.innerHTML = `<a href="#" onclick="goToCart()" class="cart-link">Cart</a>`;
     if (currentPage === 'cart.html') {
         liCart.querySelector('a').classList.add('active');
     }
     navUl.appendChild(liCart);
 
-    // Profile
+    // ================================================================
+    // PROFILE - Hidden by default (shows when logged in)
+    // ================================================================
     const liProfile = document.createElement('li');
     liProfile.id = 'navProfile';
     liProfile.style.display = 'none';
-    const profileActive = currentPage === 'profile.html' ? ' class="active"' : '';
-    liProfile.innerHTML = `<a href="profile.html"${profileActive}>👤 My Profile</a>`;
+    liProfile.innerHTML = `<a href="profile.html">My Profile</a>`;
+    if (currentPage === 'profile.html') {
+        liProfile.querySelector('a').classList.add('active');
+    }
     navUl.appendChild(liProfile);
 
-    // Logout
+    // ================================================================
+    // LOGOUT - Hidden by default (shows when logged in)
+    // ================================================================
     const liLogout = document.createElement('li');
     liLogout.id = 'navLogout';
     liLogout.style.display = 'none';
-    liLogout.innerHTML = `<a href="#" onclick="logout()">🚪 Logout</a>`;
+    liLogout.innerHTML = `<a href="#" onclick="logout()">Logout</a>`;
     navUl.appendChild(liLogout);
 
-    // Login
+    // ================================================================
+    // LOGIN - Hidden by default (shows when logged out)
+    // ================================================================
     const liLogin = document.createElement('li');
     liLogin.id = 'navLogin';
     liLogin.style.display = 'none';
-    const loginActive = currentPage === 'login.html' ? ' class="active"' : '';
-    liLogin.innerHTML = `<a href="login.html"${loginActive}>Login</a>`;
+    liLogin.innerHTML = `<a href="login.html" class="login-btn">Login</a>`;
+    if (currentPage === 'login.html') {
+        liLogin.querySelector('a').classList.add('active');
+    }
     navUl.appendChild(liLogin);
 
-    // Register
+    // ================================================================
+    // REGISTER - Hidden by default (shows when logged out)
+    // ================================================================
     const liRegister = document.createElement('li');
     liRegister.id = 'navRegister';
     liRegister.style.display = 'none';
-    const registerActive = currentPage === 'register.html' ? ' class="active"' : '';
-    liRegister.innerHTML = `<a href="register.html"${registerActive}>Register</a>`;
+    liRegister.innerHTML = `<a href="register.html" class="register-btn">Register</a>`;
+    if (currentPage === 'register.html') {
+        liRegister.querySelector('a').classList.add('active');
+    }
     navUl.appendChild(liRegister);
 
     console.log('✅ Navigation normalized');
@@ -176,64 +196,89 @@ function updateNavigation(user) {
     const navCart = document.getElementById('navCart');
 
     if (user) {
+        // ================================================================
+        // USER IS LOGGED IN
+        // ================================================================
+
+        // Hide Login and Register
         if (navLogin) navLogin.style.display = 'none';
         if (navRegister) navRegister.style.display = 'none';
+
+        // Show Profile with Avatar
         if (navProfile) {
             navProfile.style.display = 'inline-block';
-            const displayName = user.displayName || user.email || 'U';
+            const displayName = user.displayName || user.email || 'User';
             const initial = displayName.charAt(0).toUpperCase();
             const avatarLink = navProfile.querySelector('a');
             if (avatarLink) {
-                avatarLink.innerHTML = `<span class="avatar-icon" style="display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:50%;background:#7A210C;color:white;font-weight:600;font-size:14px;text-transform:uppercase;">${initial}</span>`;
+                // ✅ Avatar with user initial
+                avatarLink.innerHTML = `<span class="avatar-icon">${initial}</span>`;
                 avatarLink.href = 'profile.html';
                 avatarLink.onclick = null;
             }
 
+            // ✅ Load profile photo from Firestore if exists
             db.collection('users').doc(user.uid).get().then(doc => {
                 if (doc.exists && doc.data().photoURL) {
                     const avatarLink = navProfile.querySelector('a');
                     if (avatarLink) {
-                        avatarLink.innerHTML = `<span class="avatar-icon" style="display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:50%;background:#7A210C;color:white;font-weight:600;font-size:14px;text-transform:uppercase;overflow:hidden;"><img src="${doc.data().photoURL}" alt="" style="width:100%;height:100%;object-fit:cover;"></span>`;
+                        avatarLink.innerHTML = `<span class="avatar-icon" style="display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:50%;background:#7A210C;color:white;font-weight:700;font-size:15px;text-transform:uppercase;overflow:hidden;"><img src="${doc.data().photoURL}" alt="" style="width:100%;height:100%;object-fit:cover;"></span>`;
                     }
                 }
             }).catch(err => console.log('Firestore avatar error:', err));
         }
+
+        // Show Logout
         if (navLogout) {
             navLogout.style.display = 'inline-block';
             const logoutLink = navLogout.querySelector('a');
             if (logoutLink) {
-                logoutLink.onclick = function (e) {
+                logoutLink.onclick = function(e) {
                     e.preventDefault();
                     logout();
                 };
             }
         }
+
+        // Update Cart link (no emoji)
         if (navCart) {
-            navCart.innerHTML = '<a href="#" onclick="goToCart()">🛒 Cart</a>';
+            navCart.innerHTML = `<a href="#" onclick="goToCart()" class="cart-link">Cart</a>`;
         }
 
         console.log('👤 Navigation: Logged in as', user.displayName || user.email);
+
     } else {
+        // ================================================================
+        // USER IS LOGGED OUT
+        // ================================================================
+
+        // Show Login and Register
         if (navLogin) navLogin.style.display = 'inline-block';
         if (navRegister) navRegister.style.display = 'inline-block';
+
+        // Show Profile with default avatar (clickable to login)
         if (navProfile) {
             navProfile.style.display = 'inline-block';
             const avatarLink = navProfile.querySelector('a');
             if (avatarLink) {
-                avatarLink.innerHTML = `<span class="avatar-icon" style="display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:50%;background:#ddd;color:#999;font-weight:600;font-size:14px;">👤</span>`;
+                avatarLink.innerHTML = `<span class="avatar-icon" style="display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:50%;background:#ddd;color:#999;font-weight:600;font-size:15px;cursor:pointer;">👤</span>`;
                 avatarLink.href = '#';
-                avatarLink.onclick = function (e) {
+                avatarLink.onclick = function(e) {
                     e.preventDefault();
                     alert('Please log in to access your profile.');
                     window.location.href = 'login.html';
                 };
             }
         }
+
+        // Hide Logout
         if (navLogout) {
             navLogout.style.display = 'none';
         }
+
+        // Update Cart link (no emoji)
         if (navCart) {
-            navCart.innerHTML = '<a href="#" onclick="goToCart()">🛒 Cart</a>';
+            navCart.innerHTML = `<a href="#" onclick="goToCart()" class="cart-link">Cart</a>`;
         }
 
         console.log('👤 Navigation: Logged out');
@@ -254,6 +299,7 @@ firebase.auth().onAuthStateChanged((user) => {
 
 function handleAuthState(user) {
     if (user) {
+        // Enforce 1 week timeout (7 days in milliseconds)
         const oneWeekMs = 7 * 24 * 60 * 60 * 1000;
         const loginTimestamp = localStorage.getItem('loginTimestamp');
         const now = Date.now();
@@ -284,6 +330,7 @@ function handleAuthState(user) {
         localStorage.removeItem('currentUser');
         localStorage.removeItem('loginTimestamp');
 
+        // Redirect logged-out users away from protected pages
         const protectedPages = ['profile.html', 'cart.html', 'checkout.html'];
         const currentPage = window.location.pathname.split('/').pop() || 'index.html';
         if (protectedPages.includes(currentPage)) {
@@ -300,7 +347,7 @@ function handleAuthState(user) {
 
 // ================= GO TO CART =================
 
-window.goToCart = function () {
+window.goToCart = function() {
     const user = firebase.auth().currentUser;
     if (user) {
         window.location.href = 'cart.html';
@@ -313,7 +360,7 @@ window.goToCart = function () {
 
 // ================= PROTECTED PAGE CHECK =================
 
-window.checkAuth = function () {
+window.checkAuth = function() {
     const user = firebase.auth().currentUser;
     if (!user) {
         const currentPage = window.location.pathname.split('/').pop();
@@ -327,18 +374,18 @@ window.checkAuth = function () {
 
 // ================= REGISTER =================
 
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', function() {
     const registerForm = document.getElementById('registerForm');
     if (!registerForm) return;
 
     const passwordField = document.getElementById('regPassword');
     if (passwordField) {
-        passwordField.addEventListener('input', function () {
+        passwordField.addEventListener('input', function() {
             validatePassword(this.value);
         });
     }
 
-    registerForm.addEventListener('submit', async function (e) {
+    registerForm.addEventListener('submit', async function(e) {
         e.preventDefault();
 
         const fullname = document.getElementById('regFullName').value.trim();
@@ -410,7 +457,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 // ================= LOGIN =================
 
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', function() {
     const loginForm = document.getElementById('loginForm');
     if (!loginForm) return;
 
@@ -421,7 +468,7 @@ document.addEventListener('DOMContentLoaded', function () {
         rememberMe.checked = true;
     }
 
-    loginForm.addEventListener('submit', async function (e) {
+    loginForm.addEventListener('submit', async function(e) {
         e.preventDefault();
 
         const email = document.getElementById('loginEmail').value.trim();
@@ -486,27 +533,27 @@ document.addEventListener('DOMContentLoaded', function () {
 
 // ================= FORGOT PASSWORD =================
 
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', function() {
     const forgotPasswordLink = document.getElementById('forgotPasswordLink');
     const forgotPasswordModal = document.getElementById('forgotPasswordModal');
     const closeModal = document.getElementById('closeModal');
     const forgotPasswordForm = document.getElementById('forgotPasswordForm');
 
     if (forgotPasswordLink && forgotPasswordModal) {
-        forgotPasswordLink.addEventListener('click', function (e) {
+        forgotPasswordLink.addEventListener('click', function(e) {
             e.preventDefault();
             forgotPasswordModal.style.display = 'flex';
         });
     }
 
     if (closeModal && forgotPasswordModal) {
-        closeModal.addEventListener('click', function () {
+        closeModal.addEventListener('click', function() {
             forgotPasswordModal.style.display = 'none';
         });
     }
 
     if (forgotPasswordModal) {
-        forgotPasswordModal.addEventListener('click', function (e) {
+        forgotPasswordModal.addEventListener('click', function(e) {
             if (e.target === this) {
                 this.style.display = 'none';
             }
@@ -514,7 +561,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     if (forgotPasswordForm) {
-        forgotPasswordForm.addEventListener('submit', async function (e) {
+        forgotPasswordForm.addEventListener('submit', async function(e) {
             e.preventDefault();
 
             const email = document.getElementById('resetEmail').value.trim();
@@ -557,7 +604,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 // ================= LOGOUT =================
 
-window.logout = function () {
+window.logout = function() {
     if (confirm('Are you sure you want to logout?')) {
         firebase.auth().signOut()
             .then(() => {
@@ -575,3 +622,8 @@ window.logout = function () {
 };
 
 console.log('✅ Auth system ready!');
+
+
+
+
+// .catch((error )) => { update navigation} (null); window location href
