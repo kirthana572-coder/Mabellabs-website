@@ -137,19 +137,7 @@ function normalizeNavbar() {
     navUl.appendChild(liCart);
 
     // ================================================================
-    // PROFILE - Hidden by default (shows when logged in)
-    // ================================================================
-    const liProfile = document.createElement('li');
-    liProfile.id = 'navProfile';
-    liProfile.style.display = 'none';
-    liProfile.innerHTML = `<a href="profile.html">My Profile</a>`;
-    if (currentPage === 'profile.html') {
-        liProfile.querySelector('a').classList.add('active');
-    }
-    navUl.appendChild(liProfile);
-
-    // ================================================================
-    // LOGOUT - Hidden by default (shows when logged in)
+    // 2. LOGOUT - Hidden by default (SECOND)
     // ================================================================
     const liLogout = document.createElement('li');
     liLogout.id = 'navLogout';
@@ -158,7 +146,19 @@ function normalizeNavbar() {
     navUl.appendChild(liLogout);
 
     // ================================================================
-    // LOGIN - Hidden by default (shows when logged out)
+    // 3. PROFILE - Hidden by default (LAST ITEM - FAR RIGHT)
+    // ================================================================
+    const liProfile = document.createElement('li');
+    liProfile.id = 'navProfile';
+    liProfile.style.display = 'none';
+    liProfile.innerHTML = `<a href="profile.html">My Profile</a>`;
+    if (currentPage === 'profile.html') {
+        liProfile.querySelector('a').classList.add('active');
+    }
+    navUl.appendChild(liProfile);  // ✅ THIS IS NOW THE LAST ITEM
+
+    // ================================================================
+    // 4. LOGIN - Hidden by default
     // ================================================================
     const liLogin = document.createElement('li');
     liLogin.id = 'navLogin';
@@ -170,7 +170,7 @@ function normalizeNavbar() {
     navUl.appendChild(liLogin);
 
     // ================================================================
-    // REGISTER - Hidden by default (shows when logged out)
+    // 5. REGISTER - Hidden by default
     // ================================================================
     const liRegister = document.createElement('li');
     liRegister.id = 'navRegister';
@@ -183,6 +183,7 @@ function normalizeNavbar() {
 
     console.log('✅ Navigation normalized');
 }
+
 
 document.addEventListener('DOMContentLoaded', normalizeNavbar);
 

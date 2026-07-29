@@ -880,69 +880,29 @@ footer p {
     }
 }
 
-/* ================= PROFILE AVATAR IN NAV ================= */
-
-.avatar-icon {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 34px;
-    height: 34px;
-    border-radius: 50%;
-    background: #7A210C;
-    color: white;
-    font-weight: 700;
-    font-size: 15px;
-    text-transform: uppercase;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-.avatar-icon:hover {
-    transform: scale(1.08);
-    box-shadow: 0 4px 15px rgba(122, 33, 12, 0.3);
-}
-
 /* ================================================================ */
-/* ✅ MAKE PROFILE THE LAST ITEM - FLOAT RIGHT */
+/* ✅ PROFILE ON FAR RIGHT - ADD THIS AT THE END */
 /* ================================================================ */
 
-#navProfile {
-    margin-left: auto;  /* ✅ Pushes it to the far right */
-}
-
-#navProfile .avatar-icon {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 34px;
-    height: 34px;
-    border-radius: 50%;
-    background: #7A210C;
-    color: white;
-    font-weight: 700;
-    font-size: 15px;
-    text-transform: uppercase;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-#navProfile .avatar-icon:hover {
-    transform: scale(1.08);
-    box-shadow: 0 4px 15px rgba(122, 33, 12, 0.3);
-}
-
-/* ✅ Make sure it's at the far right */
+/* Make the navigation ul take full width */
 nav ul {
     display: flex;
     align-items: center;
     list-style: none;
     margin: 0;
     padding: 0;
-    gap: 6px;
-    width: 100%;
+    gap: 8px;
+    width: 100%;  /* ✅ Take full width */
 }
 
-nav ul li:last-child {
-    margin-left: auto; /* ✅ Pushes the last item (Profile) to the right */
+/* Push Profile to the far right */
+#navProfile {
+    margin-left: auto;  /* ✅ Pushes it to the far right */
+}
+
+/* Ensure Profile is always at the end */
+#navProfile a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }

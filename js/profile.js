@@ -64,8 +64,7 @@ function loadUserProfile(user) {
                         month: 'long',
                         day: 'numeric'
                     });
-                    document.getElementById('profileMemberSince').value = formatted;
-                    document.getElementById('displayMemberSince').textContent = 'Member since: ' + formatted;
+                    
                 }
             } else {
                 console.log('📄 No Firestore document found, creating...');
@@ -362,119 +361,133 @@ if (newPasswordField) {
 }
 
 // ================================================================
-// ✅ UPDATED: Password Change Form Submit
-// Includes password requirements validation
+// ✅ UPDATE PASSWORD - MAIN FUNCTION
 // ================================================================
 
-const passwordChangeForm = document.getElementById('passwordChangeForm');
-
-if (passwordChangeForm) {
-    passwordChangeForm.addEventListener('submit', function(e) {
-        e.preventDefault();
-
+if (updatePasswordBtn) {
+    updatePasswordBtn.addEventListener('click', async function() {
         const currentPassword = document.getElementById('currentPassword').value;
         const newPassword = document.getElementById('newPassword').value;
         const confirmNewPassword = document.getElementById('confirmNewPassword').value;
+        const messageEl = document.getElementById('passwordMessage');
 
+        // Reset message
+        messageEl.style.display = 'none';
+        messageEl.className = 'password-message';
+
+        // ================================================================
+        // VALIDATION 1: Check if all fields are filled
+        // ================================================================
         if (!currentPassword || !newPassword || !confirmNewPassword) {
             showPasswordMessage('Please fill in all fields.', 'error');
             return;
         }
 
         // ================================================================
-        // ✅ NEW: Check password requirements before submitting
+        // VALIDATION 2: Check password requirements
         // ================================================================
         if (!validateNewPassword(newPassword)) {
             showPasswordMessage('Please meet all password requirements.', 'error');
             return;
         }
 
-        if (newPassword.length < 8) {
-            showPasswordMessage('Password must be at least 8 characters.', 'error');
-            return;
-        }
-
+        // ================================================================
+        // VALIDATION 3: Check if new password matches confirm password
+        // ================================================================
         if (newPassword !== confirmNewPassword) {
-            showPasswordMessage('New passwords do not match.', 'error');
+            showPasswordMessage('The new password and confirmation password do not match.', 'error');
             return;
         }
 
+        // ================================================================
+        // VALIDATION 4: Check if new password is same as current password
+        // ================================================================
+        if (newPassword === currentPassword) {
+            showPasswordMessage('Your new password must be different from your current password.', 'error');
+            return;
+        }
+
+        // ================================================================
+        // Get current user
+        // ================================================================
         const user = firebase.auth().currentUser;
         if (!user) {
             showPasswordMessage('You must be logged in to change your password.', 'error');
             return;
         }
 
+        // ================================================================
+        // Disable button and show loading state
+        // ================================================================
         const btn = updatePasswordBtn;
+        const originalText = btn.textContent;
         btn.textContent = 'Updating...';
         btn.disabled = true;
 
-        // Re-authenticate user before changing password
-        const credential = firebase.auth.EmailAuthProvider.credential(user.email, currentPassword);
-        user.reauthenticateWithCredential(credential)
-            .then(() => user.updatePassword(newPassword))
-            .then(() => {
-                showPasswordMessage('✅ Password updated successfully!', 'success');
+        try {
+            // ================================================================
+            // STEP 1: Re-authenticate user with current password
+            // ================================================================
+            const credential = firebase.auth.EmailAuthProvider.credential(
+                user.email, 
+                currentPassword
+            );
+            await user.reauthenticateWithCredential(credential);
+
+            // ================================================================
+            // STEP 2: Update password
+            // ================================================================
+            await user.updatePassword(newPassword);
+
+            // ================================================================
+            // STEP 3: Success - Show message and reset form
+            // ================================================================
+            showPasswordMessage('✅ Your password has been updated successfully.', 'success');
+            
+            // Clear form after success
+            setTimeout(() => {
                 passwordFormContainer.style.display = 'none';
                 changePasswordBtn.style.display = 'inline-block';
-                passwordChangeForm.reset();
-                btn.textContent = 'Update Password';
-                btn.disabled = false;
-            })
-            .catch((error) => {
-                let message = error.message;
-                if (
-                    error.code === 'auth/invalid-credential' ||
-                    error.code === 'auth/wrong-password'
-                ) {
-                    message = 'Current password is incorrect. Please try again.';
-                } else if (error.code === 'auth/too-many-requests') {
-                    message = 'Too many failed attempts. Please wait before trying again.';
-                } else if (error.code === 'auth/requires-recent-login') {
-                    message = 'Session expired. Please log out and log in again before changing your password.';
-                }
-                showPasswordMessage('❌ ' + message, 'error');
-                btn.textContent = 'Update Password';
-                btn.disabled = false;
-            });
-    });
-}
+                document.getElementById('currentPassword').value = '';
+                document.getElementById('newPassword').value = '';
+                document.getElementById('confirmNewPassword').value = '';
+                messageEl.style.display = 'none';
+            }, 3000);
 
-// ================= PROFILE FORGOT PASSWORD LINK =================
-
-const profileForgotPasswordLink = document.getElementById('profileForgotPasswordLink');
-
-if (profileForgotPasswordLink) {
-    profileForgotPasswordLink.addEventListener('click', async function (e) {
-        e.preventDefault();
-
-        const user = firebase.auth().currentUser;
-        if (!user || !user.email) {
-            showPasswordMessage('❌ Could not detect your email. Please log out and try again.', 'error');
-            return;
-        }
-
-        const confirmed = confirm(`Send a password reset link to:\n${user.email}\n\nCheck your inbox (and spam folder) after clicking OK.`);
-        if (!confirmed) return;
-
-        this.textContent = 'Sending...';
-        this.style.pointerEvents = 'none';
-
-        try {
-            await firebase.auth().sendPasswordResetEmail(user.email);
-            showPasswordMessage(`📧 Reset link sent to ${user.email}. Check your inbox and spam folder.`, 'success');
         } catch (error) {
+            // ================================================================
+            // ERROR HANDLING
+            // ================================================================
+            console.error('❌ Password change error:', error);
+            
             let message = error.message;
-            if (error.code === 'auth/too-many-requests') {
-                message = 'Too many requests. Please wait a moment before trying again.';
+            if (
+                error.code === 'auth/invalid-credential' ||
+                error.code === 'auth/wrong-password'
+            ) {
+                message = 'Current password is incorrect. Please try again.';
+            } else if (error.code === 'auth/too-many-requests') {
+                message = 'Too many failed attempts. Please wait before trying again.';
+            } else if (error.code === 'auth/requires-recent-login') {
+                message = 'Session expired. Please log out and log in again before changing your password.';
+            } else if (error.code === 'auth/weak-password') {
+                message = 'Password is too weak. Please choose a stronger password.';
             }
             showPasswordMessage('❌ ' + message, 'error');
+
         } finally {
-            this.textContent = 'Forgot your current password? Send me a reset link';
-            this.style.pointerEvents = 'auto';
+            // ================================================================
+            // Re-enable button
+            // ================================================================
+            btn.textContent = originalText;
+            btn.disabled = false;
         }
     });
 }
+
+// ================================================================
+// ✅ HELPER: Show password message
+// ================================================================
 
 function showPasswordMessage(message, type) {
     passwordMessage.textContent = message;
@@ -482,7 +495,9 @@ function showPasswordMessage(message, type) {
     passwordMessage.style.display = 'block';
 }
 
-// ================= SHOW MESSAGE =================
+// ================================================================
+// ✅ SHOW MESSAGE (for profile updates)
+// ================================================================
 
 function showMessage(message, type) {
     const msgDiv = document.getElementById('profileMessage');
@@ -495,7 +510,9 @@ function showMessage(message, type) {
     }, 5000);
 }
 
-// ================= PROFILE PHOTO =================
+// ================================================================
+// ✅ PROFILE PHOTO
+// ================================================================
 
 const changePhotoBtn = document.getElementById('changePhotoBtn');
 const photoInput = document.getElementById('photoInput');

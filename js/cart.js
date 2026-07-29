@@ -77,7 +77,7 @@ async function updateCartCount(uid) {
 
         const navCart = document.getElementById('navCart');
         if (navCart) {
-            navCart.innerHTML = `<a href="#" onclick="goToCart()">🛒 Cart (${count})</a>`;
+            navCart.innerHTML = `<a href="#" onclick="goToCart()">Cart (${count})</a>`;
         }
     } catch (error) {
         console.error('❌ Error updating cart count:', error);
@@ -87,7 +87,7 @@ async function updateCartCount(uid) {
 // ================= LOAD CART PAGE =================
 
 window.loadCart = async function () {
-    console.log('🛒 Loading cart...');
+    console.log(' Loading cart...');
 
     // currentUser can be null if Firebase hasn't resolved the session yet.
     // Always call loadCart from inside onAuthStateChanged to avoid this.
@@ -241,7 +241,7 @@ firebase.auth().onAuthStateChanged((user) => {
     } else {
         const navCart = document.getElementById('navCart');
         if (navCart) {
-            navCart.innerHTML = '<a href="#" onclick="goToCart()">🛒 Cart</a>';
+            navCart.innerHTML = '<a href="#" onclick="goToCart()"> Cart</a>';
         }
     }
 });
