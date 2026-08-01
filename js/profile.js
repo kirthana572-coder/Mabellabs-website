@@ -8,6 +8,11 @@ document.addEventListener('DOMContentLoaded', function() {
         if (user) {
             console.log('👤 User logged in:', user.email);
             loadUserProfile(user);
+            
+            // ================================================================
+            // ✅ NEW: Update email verification status when user logs in
+            // ================================================================
+            updateEmailVerificationStatus(user);
         }
     });
 });
@@ -56,7 +61,7 @@ function loadUserProfile(user) {
                     document.getElementById('avatarInitial').textContent = data.fullname.charAt(0).toUpperCase();
                 }
                 
-                // Member since
+                // Member since (commented out - not used)
                 if (data.createdAt) {
                     const date = data.createdAt.toDate ? data.createdAt.toDate() : new Date(data.createdAt);
                     const formatted = date.toLocaleDateString('en-MY', {
@@ -64,8 +69,14 @@ function loadUserProfile(user) {
                         month: 'long',
                         day: 'numeric'
                     });
-                    
+                    // Member since is not displayed
                 }
+                
+                // ================================================================
+                // ✅ NEW: Update email verification status from Firestore
+                // ================================================================
+                updateEmailVerificationStatus(user);
+                
             } else {
                 console.log('📄 No Firestore document found, creating...');
                 createUserProfile(user);
@@ -86,6 +97,7 @@ function createUserProfile(user) {
         email: user.email || '',
         phone: '',
         address: '',
+        emailVerified: false, // ✅ NEW: Add emailVerified field
         createdAt: firebase.firestore.FieldValue.serverTimestamp(),
         updatedAt: firebase.firestore.FieldValue.serverTimestamp()
     };
@@ -96,6 +108,11 @@ function createUserProfile(user) {
             document.getElementById('profileName').value = userData.fullname;
             document.getElementById('profilePhone').value = '';
             document.getElementById('profileAddress').value = '';
+            
+            // ================================================================
+            // ✅ NEW: Update email verification status after profile creation
+            // ================================================================
+            updateEmailVerificationStatus(user);
         })
         .catch((error) => {
             console.error('❌ Error creating profile:', error);
@@ -201,8 +218,86 @@ if (profileForm) {
 }
 
 // ================================================================
-// ✅ NEW: PASSWORD VALIDATION FUNCTION
-// Checks password against requirements and updates UI
+// ✅ NEW: EMAIL VERIFICATION STATUS - Update UI based on verification state
+// ================================================================
+
+function updateEmailVerificationStatus(user) {
+    const statusContainer = document.getElementById('emailVerificationStatus');
+    if (!statusContainer) return;
+
+    // Check if email is verified in Firebase Auth
+    if (user.emailVerified) {
+        // User is verified - show success status
+        statusContainer.innerHTML = `
+            <div class="verification-status verified">
+                <span class="status-icon">✅</span>
+                <span class="status-text">Verified Account</span>
+                <span class="status-badge">Verified</span>
+            </div>
+        `;
+        // Hide resend button if already verified
+        const resendBtn = document.getElementById('resendVerificationBtn');
+        if (resendBtn) {
+            resendBtn.style.display = 'none';
+        }
+    } else {
+        // User is NOT verified - show warning
+        statusContainer.innerHTML = `
+            <div class="verification-status unverified">
+                <span class="status-icon">⚠️</span>
+                <span class="status-text">Your email has not been verified.</span>
+            </div>
+        `;
+        // Show resend button for unverified users
+        const resendBtn = document.getElementById('resendVerificationBtn');
+        if (resendBtn) {
+            resendBtn.style.display = 'inline-block';
+        }
+    }
+}
+
+// ================================================================
+// ✅ NEW: RESEND VERIFICATION EMAIL FROM PROFILE PAGE
+// ================================================================
+
+document.addEventListener('DOMContentLoaded', function() {
+    const resendBtn = document.getElementById('resendVerificationBtn');
+    if (!resendBtn) return;
+
+    resendBtn.addEventListener('click', async function() {
+        const user = firebase.auth().currentUser;
+        if (!user) {
+            alert('Please log in first.');
+            return;
+        }
+
+        // If already verified, no need to resend
+        if (user.emailVerified) {
+            alert('Your email is already verified.');
+            return;
+        }
+
+        // Disable button and show loading state
+        const originalText = this.textContent;
+        this.textContent = 'Sending...';
+        this.disabled = true;
+
+        try {
+            // Firebase method to resend verification email
+            await user.sendEmailVerification();
+            alert('✅ A new verification email has been sent successfully. Please check your inbox and spam folder.');
+        } catch (error) {
+            console.error('Resend verification error:', error);
+            alert('❌ Error: ' + error.message);
+        } finally {
+            this.textContent = originalText;
+            this.disabled = false;
+        }
+    });
+});
+
+// ================================================================
+// ✅ PASSWORD VALIDATION FUNCTION
 // ================================================================
 
 function validateNewPassword(password) {
@@ -249,8 +344,7 @@ function validateNewPassword(password) {
 }
 
 // ================================================================
-// ✅ NEW: TOGGLE PASSWORD VISIBILITY FUNCTION
-// Toggles between showing and hiding password text
+// ✅ TOGGLE PASSWORD VISIBILITY
 // ================================================================
 
 function togglePasswordVisibility(fieldId) {
@@ -264,7 +358,6 @@ function togglePasswordVisibility(fieldId) {
         // Show password
         field.type = 'text';
         if (icon) {
-            // Change to eye-off icon (crossed eye)
             icon.innerHTML = `
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/>
@@ -276,7 +369,6 @@ function togglePasswordVisibility(fieldId) {
         // Hide password
         field.type = 'password';
         if (icon) {
-            // Change to eye icon
             icon.innerHTML = `
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
@@ -287,11 +379,6 @@ function togglePasswordVisibility(fieldId) {
     }
 }
 
-// ================================================================
-// ✅ NEW: MAKE TOGGLE FUNCTION AVAILABLE GLOBALLY
-// Required for onclick in HTML
-// ================================================================
-
 window.togglePasswordVisibility = togglePasswordVisibility;
 
 // ================= CHANGE PASSWORD =================
@@ -301,11 +388,6 @@ const cancelPasswordBtn = document.getElementById('cancelPasswordBtn');
 const passwordFormContainer = document.getElementById('passwordFormContainer');
 const updatePasswordBtn = document.getElementById('updatePasswordBtn');
 const passwordMessage = document.getElementById('passwordMessage');
-
-// ================================================================
-// ✅ UPDATED: Change Password Button Click
-// Opens form and resets requirement indicators
-// ================================================================
 
 if (changePasswordBtn) {
     changePasswordBtn.addEventListener('click', function() {
@@ -320,15 +402,12 @@ if (changePasswordBtn) {
         document.getElementById('newPassword').value = '';
         document.getElementById('confirmNewPassword').value = '';
         
-        // ================================================================
-        // ✅ NEW: Reset password requirements to default state
-        // ================================================================
+        // Reset password requirements
         const reqs = ['pwd-req-length', 'pwd-req-uppercase', 'pwd-req-lowercase', 'pwd-req-number', 'pwd-req-special'];
         reqs.forEach(id => {
             const el = document.getElementById(id);
             if (el) {
                 el.className = '';
-                // Remove emoji prefix and show clean text
                 el.textContent = el.textContent.replace(/[✅❌] /, '');
             }
         });
@@ -348,11 +427,7 @@ if (cancelPasswordBtn) {
     });
 }
 
-// ================================================================
-// ✅ NEW: Real-time password validation on input
-// Updates requirements as user types
-// ================================================================
-
+// Real-time password validation on input
 const newPasswordField = document.getElementById('newPassword');
 if (newPasswordField) {
     newPasswordField.addEventListener('input', function() {
@@ -360,10 +435,7 @@ if (newPasswordField) {
     });
 }
 
-// ================================================================
-// ✅ UPDATE PASSWORD - MAIN FUNCTION
-// ================================================================
-
+// Update Password Button
 if (updatePasswordBtn) {
     updatePasswordBtn.addEventListener('click', async function() {
         const currentPassword = document.getElementById('currentPassword').value;
@@ -371,80 +443,52 @@ if (updatePasswordBtn) {
         const confirmNewPassword = document.getElementById('confirmNewPassword').value;
         const messageEl = document.getElementById('passwordMessage');
 
-        // Reset message
         messageEl.style.display = 'none';
         messageEl.className = 'password-message';
 
-        // ================================================================
-        // VALIDATION 1: Check if all fields are filled
-        // ================================================================
+        // Validation 1: Check if all fields are filled
         if (!currentPassword || !newPassword || !confirmNewPassword) {
             showPasswordMessage('Please fill in all fields.', 'error');
             return;
         }
 
-        // ================================================================
-        // VALIDATION 2: Check password requirements
-        // ================================================================
+        // Validation 2: Check password requirements
         if (!validateNewPassword(newPassword)) {
             showPasswordMessage('Please meet all password requirements.', 'error');
             return;
         }
 
-        // ================================================================
-        // VALIDATION 3: Check if new password matches confirm password
-        // ================================================================
+        // Validation 3: Check if new password matches confirm password
         if (newPassword !== confirmNewPassword) {
             showPasswordMessage('The new password and confirmation password do not match.', 'error');
             return;
         }
 
-        // ================================================================
-        // VALIDATION 4: Check if new password is same as current password
-        // ================================================================
+        // Validation 4: Check if new password is same as current password
         if (newPassword === currentPassword) {
             showPasswordMessage('Your new password must be different from your current password.', 'error');
             return;
         }
 
-        // ================================================================
         // Get current user
-        // ================================================================
         const user = firebase.auth().currentUser;
         if (!user) {
             showPasswordMessage('You must be logged in to change your password.', 'error');
             return;
         }
 
-        // ================================================================
-        // Disable button and show loading state
-        // ================================================================
         const btn = updatePasswordBtn;
         const originalText = btn.textContent;
         btn.textContent = 'Updating...';
         btn.disabled = true;
 
         try {
-            // ================================================================
-            // STEP 1: Re-authenticate user with current password
-            // ================================================================
-            const credential = firebase.auth.EmailAuthProvider.credential(
-                user.email, 
-                currentPassword
-            );
+            const credential = firebase.auth.EmailAuthProvider.credential(user.email, currentPassword);
             await user.reauthenticateWithCredential(credential);
-
-            // ================================================================
-            // STEP 2: Update password
-            // ================================================================
             await user.updatePassword(newPassword);
 
-            // ================================================================
-            // STEP 3: Success - Show message and reset form
-            // ================================================================
             showPasswordMessage('✅ Your password has been updated successfully.', 'success');
             
-            // Clear form after success
             setTimeout(() => {
                 passwordFormContainer.style.display = 'none';
                 changePasswordBtn.style.display = 'inline-block';
@@ -455,16 +499,10 @@ if (updatePasswordBtn) {
             }, 3000);
 
         } catch (error) {
-            // ================================================================
-            // ERROR HANDLING
-            // ================================================================
             console.error('❌ Password change error:', error);
             
             let message = error.message;
-            if (
-                error.code === 'auth/invalid-credential' ||
-                error.code === 'auth/wrong-password'
-            ) {
+            if (error.code === 'auth/invalid-credential' || error.code === 'auth/wrong-password') {
                 message = 'Current password is incorrect. Please try again.';
             } else if (error.code === 'auth/too-many-requests') {
                 message = 'Too many failed attempts. Please wait before trying again.';
@@ -476,9 +514,6 @@ if (updatePasswordBtn) {
             showPasswordMessage('❌ ' + message, 'error');
 
         } finally {
-            // ================================================================
-            // Re-enable button
-            // ================================================================
             btn.textContent = originalText;
             btn.disabled = false;
         }

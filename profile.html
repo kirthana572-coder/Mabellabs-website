@@ -85,17 +85,34 @@
                                 <label>Phone Number</label>
                                 <input type="tel" id="profilePhone" disabled>
                             </div>
-                            <!-- ✅ DELIVERY ADDRESS - RESTORED -->
                             <div class="form-group">
                                 <label>Delivery Address</label>
                                 <input type="text" id="profileAddress" disabled>
                             </div>
-                            <!-- ✅ Member Since REMOVED -->
                             <div class="form-actions" id="formActions" style="display: none;">
                                 <button type="submit" class="btn-save">💾 Save Changes</button>
                                 <button type="button" class="btn-cancel" id="cancelBtn">✖ Cancel</button>
                             </div>
                         </form>
+                    </div>
+                </div>
+
+                <!-- ================================================================ -->
+                <!-- ✅ NEW: EMAIL VERIFICATION SECTION                               -->
+                <!-- Shows verification status and allows resending verification email -->
+                <!-- ================================================================ -->
+                <div class="info-section">
+                    <div class="section-header">
+                        <h2>📧 Email Verification</h2>
+                    </div>
+                    <div class="section-body">
+                        <div id="emailVerificationStatus">
+                            <!-- Status will be dynamically updated by profile.js -->
+                            <p style="color: #999; font-size: 14px;">Loading verification status...</p>
+                        </div>
+                        <button class="btn-send-verification" id="resendVerificationBtn" style="display: none;">
+                            Send Verification Email Again
+                        </button>
                     </div>
                 </div>
 

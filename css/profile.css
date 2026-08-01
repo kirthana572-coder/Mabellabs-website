@@ -239,6 +239,158 @@
     transform: translateY(-2px);
 }
 
+/* ================================================================ */
+/* ✅ NEW: EMAIL VERIFICATION STYLES                               */
+/* ================================================================ */
+
+/* Status container - shows verified or unverified state */
+.verification-status {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 15px 20px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+/* Verified status - green background */
+.verification-status.verified {
+    background: #d4edda;
+    border: 1px solid #c3e6cb;
+    color: #155724;
+}
+
+/* Unverified status - yellow warning background */
+.verification-status.unverified {
+    background: #fff3cd;
+    border: 1px solid #ffeaa7;
+    color: #856404;
+}
+
+/* Status icon (emoji) */
+.verification-status .status-icon {
+    font-size: 24px;
+}
+
+/* Status text */
+.verification-status .status-text {
+    font-weight: 500;
+}
+
+/* Verified badge - green pill */
+.verification-status .status-badge {
+    background: #28a745;
+    color: white;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+/* Resend verification button */
+.btn-send-verification {
+    padding: 12px 25px;
+    background: #7A210C;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: 'Poppins', sans-serif;
+    margin-top: 10px;
+}
+
+.btn-send-verification:hover {
+    background: #A73718;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(122, 33, 12, 0.25);
+}
+
+.btn-send-verification:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* ================================================================ */
+/* ✅ PASSWORD TOGGLE ICON                                        */
+/* ================================================================ */
+
+.password-input-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.password-input-wrapper input {
+    width: 100%;
+    padding-right: 45px;
+}
+
+.toggle-password-icon {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #999;
+    transition: color 0.3s ease;
+    user-select: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px;
+    border-radius: 4px;
+}
+
+.toggle-password-icon:hover {
+    color: #7A210C;
+    background: rgba(122, 33, 12, 0.08);
+}
+
+.toggle-password-icon svg {
+    display: block;
+}
+
+/* ================================================================ */
+/* ✅ PASSWORD REQUIREMENTS                                       */
+/* ================================================================ */
+
+.password-requirements {
+    background: #f8f8f8;
+    padding: 12px 16px;
+    border-radius: 8px;
+    margin: 12px 0 15px;
+    font-size: 13px;
+}
+
+.password-requirements p {
+    font-weight: 500;
+    color: #333;
+    margin-bottom: 4px;
+}
+
+.password-requirements ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.password-requirements ul li {
+    padding: 3px 0;
+    transition: all 0.3s ease;
+    font-size: 13px;
+}
+
+.password-requirements ul li.valid {
+    color: #28a745;
+}
+
+.password-requirements ul li.invalid {
+    color: #e74c3c;
+}
+
 /* ================= SECURITY ================= */
 
 .security-buttons {
@@ -346,6 +498,18 @@
     }
     
     .btn-save, .btn-cancel, .btn-change-password, .btn-logout {
+        width: 100%;
+        text-align: center;
+    }
+
+    /* ✅ NEW: Responsive verification status */
+    .verification-status {
+        flex-direction: column;
+        text-align: center;
+        gap: 8px;
+    }
+    
+    .btn-send-verification {
         width: 100%;
         text-align: center;
     }

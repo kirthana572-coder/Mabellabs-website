@@ -73,6 +73,20 @@ function validatePassword(password) {
     return Object.values(requirements).every(Boolean);
 }
 
+// ================================================================
+// ✅ NEW: Show message in auth container
+// ================================================================
+
+function showMessage(message, type = 'error') {
+    const msgDiv = document.getElementById('authMessage');
+    if (!msgDiv) return;
+    msgDiv.textContent = message;
+    msgDiv.className = 'auth-message show ' + type;
+    setTimeout(() => {
+        msgDiv.classList.remove('show');
+    }, 6000);
+}
+
 // ================= RENDER NAVBAR =================
 
 function renderNavbarComponent() {
@@ -126,7 +140,7 @@ function normalizeNavbar() {
     });
 
     // ================================================================
-    // CART - Always show (no emoji, just text)
+    // CART - Always show
     // ================================================================
     const liCart = document.createElement('li');
     liCart.id = 'navCart';
@@ -137,7 +151,7 @@ function normalizeNavbar() {
     navUl.appendChild(liCart);
 
     // ================================================================
-    // 2. LOGOUT - Hidden by default (SECOND)
+    // 2. LOGOUT - Hidden by default
     // ================================================================
     const liLogout = document.createElement('li');
     liLogout.id = 'navLogout';
@@ -155,7 +169,7 @@ function normalizeNavbar() {
     if (currentPage === 'profile.html') {
         liProfile.querySelector('a').classList.add('active');
     }
-    navUl.appendChild(liProfile);  // ✅ THIS IS NOW THE LAST ITEM
+    navUl.appendChild(liProfile);
 
     // ================================================================
     // 4. LOGIN - Hidden by default
@@ -184,7 +198,6 @@ function normalizeNavbar() {
     console.log('✅ Navigation normalized');
 }
 
-
 document.addEventListener('DOMContentLoaded', normalizeNavbar);
 
 // ================= NAVIGATION UPDATE =================
@@ -212,13 +225,11 @@ function updateNavigation(user) {
             const initial = displayName.charAt(0).toUpperCase();
             const avatarLink = navProfile.querySelector('a');
             if (avatarLink) {
-                // ✅ Avatar with user initial
                 avatarLink.innerHTML = `<span class="avatar-icon">${initial}</span>`;
                 avatarLink.href = 'profile.html';
                 avatarLink.onclick = null;
             }
 
-            // ✅ Load profile photo from Firestore if exists
             db.collection('users').doc(user.uid).get().then(doc => {
                 if (doc.exists && doc.data().photoURL) {
                     const avatarLink = navProfile.querySelector('a');
@@ -241,7 +252,7 @@ function updateNavigation(user) {
             }
         }
 
-        // Update Cart link (no emoji)
+        // Update Cart link
         if (navCart) {
             navCart.innerHTML = `<a href="#" onclick="goToCart()" class="cart-link">Cart</a>`;
         }
@@ -277,7 +288,7 @@ function updateNavigation(user) {
             navLogout.style.display = 'none';
         }
 
-        // Update Cart link (no emoji)
+        // Update Cart link
         if (navCart) {
             navCart.innerHTML = `<a href="#" onclick="goToCart()" class="cart-link">Cart</a>`;
         }
@@ -327,6 +338,16 @@ function handleAuthState(user) {
             displayName: user.displayName
         }));
 
+        // ================================================================
+        // ✅ NEW: Auto-update Firestore if email is verified
+        // ================================================================
+        if (user.emailVerified) {
+            db.collection('users').doc(user.uid).update({
+                emailVerified: true,
+                updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+            }).catch(err => console.log('Firestore update error:', err));
+        }
+
     } else {
         localStorage.removeItem('currentUser');
         localStorage.removeItem('loginTimestamp');
@@ -359,7 +380,9 @@ window.goToCart = function() {
     }
 };
 
-// ================= PROTECTED PAGE CHECK =================
+// ================================================================
+// ✅ UPDATED: PROTECTED PAGE CHECK - Now also checks email verification
+// ================================================================
 
 window.checkAuth = function() {
     const user = firebase.auth().currentUser;
@@ -370,10 +393,22 @@ window.checkAuth = function() {
         window.location.href = 'login.html';
         return false;
     }
+    // ================================================================
+    // ✅ NEW: Check if email is verified for protected pages
+    // ================================================================
+    if (!user.emailVerified) {
+        const currentPage = window.location.pathname.split('/').pop();
+        localStorage.setItem('redirectAfterLogin', currentPage);
+        alert('Please verify your email before accessing this page.');
+        window.location.href = 'login.html';
+        return false;
+    }
     return true;
 };
 
-// ================= REGISTER =================
+// ================================================================
+// ✅ UPDATED: REGISTER - Now sends verification email
+// ================================================================
 
 document.addEventListener('DOMContentLoaded', function() {
     const registerForm = document.getElementById('registerForm');
@@ -396,22 +431,22 @@ document.addEventListener('DOMContentLoaded', function() {
         const confirmPassword = document.getElementById('regConfirmPassword').value;
 
         if (!fullname || !email || !phone || !password || !confirmPassword) {
-            alert('Please fill in all fields');
+            showMessage('Please fill in all fields', 'error');
             return;
         }
 
         if (!isValidEmail(email)) {
-            alert('Please enter a valid email address');
+            showMessage('Please enter a valid email address', 'error');
             return;
         }
 
         if (!validatePassword(password)) {
-            alert('Please meet all password requirements');
+            showMessage('Please meet all password requirements', 'error');
             return;
         }
 
         if (password !== confirmPassword) {
-            alert('Passwords do not match');
+            showMessage('Passwords do not match', 'error');
             return;
         }
 
@@ -420,25 +455,65 @@ document.addEventListener('DOMContentLoaded', function() {
         btn.disabled = true;
 
         try {
+            // ================================================================
+            // STEP 1: Create user in Firebase Auth
+            // ================================================================
             const userCredential = await firebase.auth().createUserWithEmailAndPassword(email, password);
             const user = userCredential.user;
 
+            // ================================================================
+            // STEP 2: Update display name
+            // ================================================================
             await user.updateProfile({ displayName: fullname });
 
+            // ================================================================
+            // ✅ NEW: STEP 3: Send verification email
+            // ================================================================
+            await user.sendEmailVerification();
+
+            // ================================================================
+            // STEP 4: Save to Firestore with emailVerified: false
+            // ================================================================
             await db.collection('users').doc(user.uid).set({
                 uid: user.uid,
                 fullname: fullname,
                 email: email,
                 phone: phone,
                 address: '',
+                emailVerified: false, // ✅ NEW: Important - false until verified
                 createdAt: firebase.firestore.FieldValue.serverTimestamp(),
                 updatedAt: firebase.firestore.FieldValue.serverTimestamp()
             });
 
-            localStorage.setItem('loginTimestamp', Date.now().toString());
+            // ================================================================
+            // ✅ NEW: STEP 5: Sign out immediately (don't allow login without verification)
+            // ================================================================
+            await firebase.auth().signOut();
 
-            alert('✅ Registration successful! Welcome to MABELLABS Malaysia.');
-            window.location.href = 'index.html';
+            // ================================================================
+            // STEP 6: Show success modal with verification message
+            // ================================================================
+            const successModal = document.getElementById('registerSuccessModal');
+            const successMsg = document.getElementById('successMessage');
+            if (successModal && successMsg) {
+                successMsg.textContent = `✅ A verification email has been sent to ${email}. Please verify your email before logging in.`;
+                successModal.style.display = 'flex';
+                
+                const goToLoginBtn = document.getElementById('goToLoginBtn');
+                if (goToLoginBtn) {
+                    goToLoginBtn.addEventListener('click', function() {
+                        window.location.href = 'login.html';
+                    });
+                }
+                
+                // Auto redirect after 6 seconds
+                setTimeout(() => {
+                    window.location.href = 'login.html';
+                }, 6000);
+            } else {
+                alert(`✅ Registration successful! A verification email has been sent to ${email}. Please check your inbox and spam folder.`);
+                window.location.href = 'login.html';
+            }
 
         } catch (error) {
             console.error('Registration error:', error);
@@ -447,8 +522,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 message = 'This email is already registered. Please login.';
             } else if (error.code === 'auth/network-request-failed') {
                 message = 'Network error. Please check your internet connection.';
+            } else if (error.code === 'auth/too-many-requests') {
+                message = 'Too many requests. Please wait a moment and try again.';
             }
-            alert('❌ ' + message);
+            showMessage('❌ ' + message, 'error');
         } finally {
             btn.textContent = 'Create Account';
             btn.disabled = false;
@@ -456,7 +533,9 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-// ================= LOGIN =================
+// ================================================================
+// ✅ UPDATED: LOGIN - Now checks if email is verified
+// ================================================================
 
 document.addEventListener('DOMContentLoaded', function() {
     const loginForm = document.getElementById('loginForm');
@@ -476,7 +555,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const password = document.getElementById('loginPassword').value;
 
         if (!email || !password) {
-            alert('Please fill in all fields');
+            showMessage('Please fill in all fields', 'error');
             return;
         }
 
@@ -485,8 +564,68 @@ document.addEventListener('DOMContentLoaded', function() {
         btn.disabled = true;
 
         try {
+            // ================================================================
+            // STEP 1: Sign in with Firebase Auth
+            // ================================================================
             const userCredential = await firebase.auth().signInWithEmailAndPassword(email, password);
             const user = userCredential.user;
+
+            // ================================================================
+            // ✅ NEW: STEP 2: CHECK IF EMAIL IS VERIFIED
+            // ================================================================
+            if (!user.emailVerified) {
+                // Sign out immediately
+                await firebase.auth().signOut();
+                
+                // Show the "Email Not Verified" modal
+                const modal = document.getElementById('emailNotVerifiedModal');
+                const resendBtn = document.getElementById('resendVerificationBtn');
+                const backBtn = document.getElementById('backToLoginBtn');
+                const resendMsg = document.getElementById('resendMessage');
+                
+                if (modal) {
+                    modal.style.display = 'flex';
+                    
+                    // ================================================================
+                    // ✅ NEW: Resend verification email from modal
+                    // ================================================================
+                    if (resendBtn) {
+                        resendBtn.onclick = async function() {
+                            resendBtn.textContent = 'Sending...';
+                            resendBtn.disabled = true;
+                            resendMsg.textContent = '';
+                            
+                            try {
+                                await user.sendEmailVerification();
+                                resendMsg.style.color = '#28a745';
+                                resendMsg.textContent = '✅ A new verification email has been sent successfully.';
+                            } catch (err) {
+                                resendMsg.style.color = '#e74c3c';
+                                resendMsg.textContent = '❌ Error: ' + err.message;
+                            } finally {
+                                resendBtn.textContent = 'Resend Verification Email';
+                                resendBtn.disabled = false;
+                            }
+                        };
+                    }
+                    
+                    if (backBtn) {
+                        backBtn.onclick = function() {
+                            modal.style.display = 'none';
+                            document.getElementById('loginEmail').value = '';
+                            document.getElementById('loginPassword').value = '';
+                        };
+                    }
+                }
+                
+                btn.textContent = 'Login';
+                btn.disabled = false;
+                return;
+            }
+
+            // ================================================================
+            // STEP 3: Email IS verified - proceed with login
+            // ================================================================
 
             if (rememberMe && rememberMe.checked) {
                 localStorage.setItem('rememberedEmail', email);
@@ -496,9 +635,18 @@ document.addEventListener('DOMContentLoaded', function() {
 
             localStorage.setItem('loginTimestamp', Date.now().toString());
 
+            // ================================================================
+            // ✅ NEW: Update Firestore - mark email as verified
+            // ================================================================
+            await db.collection('users').doc(user.uid).update({
+                emailVerified: true,
+                lastLogin: firebase.firestore.FieldValue.serverTimestamp(),
+                updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+            }).catch(err => console.log('Firestore update error:', err));
+
             updateNavigation(user);
 
-            alert('✅ Login successful! Welcome back!');
+            showMessage('✅ Login successful! Welcome back!', 'success');
 
             const redirectUrl = localStorage.getItem('redirectAfterLogin');
             setTimeout(() => {
@@ -524,7 +672,7 @@ document.addEventListener('DOMContentLoaded', function() {
             } else if (error.code === 'auth/network-request-failed') {
                 message = 'Network error. Please check your internet connection.';
             }
-            alert('❌ ' + message);
+            showMessage('❌ ' + message, 'error');
         } finally {
             btn.textContent = 'Login';
             btn.disabled = false;
@@ -583,7 +731,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
             try {
                 await firebase.auth().sendPasswordResetEmail(email);
-                alert('✅ A password reset link has been sent to your email.');
+                alert('✅ A password reset link has been sent to your email. Please check your inbox and spam folder.');
                 forgotPasswordModal.style.display = 'none';
                 forgotPasswordForm.reset();
             } catch (error) {
@@ -623,8 +771,3 @@ window.logout = function() {
 };
 
 console.log('✅ Auth system ready!');
-
-
-
-
-// .catch((error )) => { update navigation} (null); window location href

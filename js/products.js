@@ -9,38 +9,38 @@ document.addEventListener('DOMContentLoaded', function() {
             name: "✨ Skin Brightening & Whitening",
             description: "Advanced skin brightening and whitening solutions for radiant, even-toned skin",
             products: [
-                { name: "Dermagene Exchanger", sku: "WH-001", price: "RM 699.00", priceOld: null, rating: 5, reviews: 24, badge: "Best Seller", badgeClass: "gold", icon: "🧴", image: "images/products/dermagene.png", desc: "SLC24A5 Activity Brightening Technology" },
-                { name: "EXO-THERAPY III Brightening Complex", sku: "WH-002", price: "RM 8500.00", priceOld: null, rating: 4, reviews: 18, badge: "New", badgeClass: "green", icon: "🧴", image: "images/products/TherapyGluta.jpeg", desc: "EXO-THERAPY III Brightening Complex" },
-                { name: "Royal Booster Injection", sku: "WH-003", price: "RM 350.00", priceOld: null, rating: 5, reviews: 31, badge: null, badgeClass: null, icon: "🧴", image: "images/products/Royalbooster.jpeg", desc: "Power Vitamin C & Glutathione Complex" },
-                { name: "Viscera Skin Booster", sku: "WH-004", price: "RM 350.00", priceOld: null, rating: 4, reviews: 12, badge: "Limited", badgeClass: "blue", icon: "🧴", image: "images/products/Viscera.jpeg", desc: "Premier Phyto Stemcell Therapy" },
-                { name: "Marine Pearl Hydrolysed HA", sku: "WH-005", price: "RM 2,200.00", priceOld: null, rating: 5, reviews: 15, badge: "New", badgeClass: "green", icon: "🧴", image: "images/products/Marinepearl.jpeg", desc: "Marine-based hydration & brightening" },
-                { name: "Yumi Kojic Acid", sku: "WH-006", price: "RM 3,000.00", priceOld: null, rating: 4, reviews: 22, badge: "Best Seller", badgeClass: "gold", icon: "🧴", image: "images/products/Yumikojicasid.jpg", desc: "Professional Kojic Acid brightening" },
-                { name: "Royal Ultra Booster", sku: "WH-007", price: "RM 390.00", priceOld: null, rating: 5, reviews: 27, badge: "Best Seller", badgeClass: "gold", icon: "🧴", image: "images/products/Royalultrabooster.jpeg", desc: "Premier Stem Cell & Antioxidant Infusion" },
-                { name: "SLC24A5 Inhibitor III + SCF III", sku: "WH-008", price: "RM 25,000.00", priceOld: null, rating: 5, reviews: 8, badge: "Premium", badgeClass: "blue", icon: "🧬", image: "images/products/SLC24A4.jpeg", desc: "Advanced Swiss brightening therapy" },
-                { name: "Fairplus III Capsules", sku: "WH-009", price: "RM 800.00", priceOld: null, rating: 4, reviews: 30, badge: null, badgeClass: null, icon: "💊", image: "images/products/fairpluscapsules.jpeg", desc: "Premium antioxidant supplement" },
-                { name: "Complexion Exchanger", sku: "WH-010", price: "RM 15000.00", priceOld: null, rating: 4, reviews: 30, badge: null, badgeClass: null, icon: "💊", image: "images/products/Complexionexchanger2.jpeg", desc: "Premium antioxidant supplement" },
-                { name: "HD BLC02W5", sku: "WH-011", price: "RM 2000.00", priceOld: null, rating: 4, reviews: 16, badge: "New", badgeClass: "green", icon: "🧬", image: "images/products/BLC02W5.jpeg", desc: "Cellular regeneration" },
+                { name: "Dermagene Exchanger", sku: "WH-001", price: "RM 699.00", priceOld: null, rating: 5, reviews: 24, badge: "In Stock", badgeClass: "gold", icon: "🧴", image: "images/products/dermagene.png", desc: "SLC24A5 Activity Brightening Technology" },
+                { name: "EXO-THERAPY III Brightening Complex", sku: "WH-002", price: "RM 8500.00", priceOld: null, rating: 4, reviews: 18, badge: "In Stock", badgeClass: "gold", icon: "🧴", image: "images/products/TherapyGluta.jpeg", desc: "EXO-THERAPY III Brightening Complex" },
+                { name: "Royal Booster Injection", sku: "WH-003", price: "RM 350.00", priceOld: null, rating: 5, reviews: 31, badge: "In Stock", badgeClass: "gold", icon: "🧴", image: "images/products/Royalbooster.jpeg", desc: "Power Vitamin C & Glutathione Complex" },
+                { name: "Viscera Skin Booster", sku: "WH-004", price: "RM 350.00", priceOld: null, rating: 4, reviews: 12, badge: "In Stock", badgeClass: "blue", icon: "🧴", image: "images/products/Viscera.jpeg", desc: "Premier Phyto Stemcell Therapy" },
+                { name: "Marine Pearl Hydrolysed HA", sku: "WH-005", price: "RM 2,200.00", priceOld: null, rating: 5, reviews: 15, badge: "In Stock", badgeClass: "green", icon: "🧴", image: "images/products/Marinepearl.jpeg", desc: "Marine-based hydration & brightening" },
+                { name: "Yumi Kojic Acid", sku: "WH-006", price: "RM 3,000.00", priceOld: null, rating: 4, reviews: 22, badge: "In Stock", badgeClass: "gold", icon: "🧴", image: "images/products/Yumikojicasid.jpg", desc: "Professional Kojic Acid brightening" },
+                { name: "Royal Ultra Booster", sku: "WH-007", price: "RM 390.00", priceOld: null, rating: 5, reviews: 27, badge: "In Stock", badgeClass: "gold", icon: "🧴", image: "images/products/Royalultrabooster.jpeg", desc: "Premier Stem Cell & Antioxidant Infusion" },
+                { name: "SLC24A5 Inhibitor III + SCF III", sku: "WH-008", price: "RM 25,000.00", priceOld: null, rating: 5, reviews: 8, badge: "In Stock", badgeClass: "blue", icon: "🧬", image: "images/products/SLC24A4.jpeg", desc: "Advanced Swiss brightening therapy" },
+                { name: "Fairplus III Capsules", sku: "WH-009", price: "RM 800.00", priceOld: null, rating: 4, reviews: 30, badge: "In Stock", badgeClass:"gold", icon: "💊", image: "images/products/fairpluscapsules.jpeg", desc: "Premium antioxidant supplement" },
+                { name: "Complexion Exchanger", sku: "WH-010", price: "RM 15000.00", priceOld: null, rating: 4, reviews: 30, badge: "In Stock", badgeClass: "gold", icon: "💊", image: "images/products/Complexionexchanger2.jpeg", desc: "Premium antioxidant supplement" },
+                { name: "HD BLC02W5", sku: "WH-011", price: "RM 2000.00", priceOld: null, rating: 4, reviews: 16, badge: "In Stock", badgeClass: "green", icon: "🧬", image: "images/products/BLC02W5.jpeg", desc: "Cellular regeneration" },
             ]
         },
         antiaging: {
             name: "🌟 Anti-Aging & Regeneration",
             description: "Premium anti-aging and skin regeneration solutions for youthful vitality",
             products: [
-                { name: "GHK-Cu 50mg", sku: "AA-001", price: "RM 259.00", priceOld: null, rating: 5, reviews: 42, badge: "Best Seller", badgeClass: "gold", icon: "✨", image: "images/products/GHKCU50MG.jpeg", desc: "Copper peptide anti-aging" },
-                { name: "GHK-Cu 100mg", sku: "AA-002", price: "RM 399.00", priceOld: null, rating: 5, reviews: 35, badge: "New", badgeClass: "green", icon: "✨", image: "images/products/GHKCU.jpeg", desc: "High potency copper peptide" },
-                { name: "NAD+", sku: "AA-003", price: "RM 650.00", priceOld: null, rating: 5, reviews: 15, badge: null, badgeClass: null, icon: "✨", image: "images/products/NAD.jpeg", desc: "Cellular energy & regeneration" },
-                { name: "Exosome Therapy", sku: "AA-004", price: "RM 8500.00", priceOld: null, rating: 4, reviews: 33, badge: "Limited", badgeClass: "blue", icon: "✨", image: "images/products/exosome.jpeg", desc: "Advanced exosome regeneration" },
-                { name: "NCKX5 Exchanger Stem Cell Booster", sku: "AA-005", price: "RM 599.00", priceOld: null, rating: 4, reviews: 33, badge: "Limited", badgeClass: "blue", icon: "✨", image: "images/products/NCKX5.jpeg", desc: "Advanced exosome regeneration" },
-                { name: "Deer Placenta", sku: "AA-006", price: "RM 4500.00", priceOld: null, rating: 4, reviews: 33, badge: "Limited", badgeClass: "blue", icon: "✨", image: "images/products/deerplacenta.png", desc: "Advanced exosome regeneration" },
-                { name: "Sheep Placenta", sku: "AA-007", price: "RM 3500.00", priceOld: null, rating: 4, reviews: 33, badge: "Limited", badgeClass: "blue", icon: "✨", image: "images/products/Sheepplacenta.jpeg", desc: "Advanced exosome regeneration" },
-                { name: "Peach Ceramide Stem cell Solution", sku: "AA-008", price: "RM 9000.00", priceOld: null, rating: 4, reviews: 33, badge: "Limited", badgeClass: "blue", icon: "✨", image: "images/products/peachceramide.png", desc: "Advanced exosome regeneration" }
+                { name: "GHK-Cu 50mg", sku: "AA-001", price: "RM 259.00", priceOld: null, rating: 5, reviews: 42, badge: "In Stock", badgeClass: "gold", icon: "✨", image: "images/products/GHKCU50MG.jpeg", desc: "Copper peptide anti-aging" },
+                { name: "GHK-Cu 100mg", sku: "AA-002", price: "RM 399.00", priceOld: null, rating: 5, reviews: 35, badge: "In Stock", badgeClass: "green", icon: "✨", image: "images/products/GHKCU.jpeg", desc: "High potency copper peptide" },
+                { name: "NAD+", sku: "AA-003", price: "RM 650.00", priceOld: null, rating: 5, reviews: 15, badge: "In Stock", badgeClass: "gold", icon: "✨", image: "images/products/NAD.jpeg", desc: "Cellular energy & regeneration" },
+                { name: "Exosome Therapy", sku: "AA-004", price: "RM 8500.00", priceOld: null, rating: 4, reviews: 33, badge: "In Stock", badgeClass: "blue", icon: "✨", image: "images/products/exosome.jpeg", desc: "Advanced exosome regeneration" },
+                { name: "NCKX5 Exchanger Stem Cell Booster", sku: "AA-005", price: "RM 599.00", priceOld: null, rating: 4, reviews: 33, badge: "In Stock", badgeClass: "blue", icon: "✨", image: "images/products/NCKX5.jpeg", desc: "Advanced exosome regeneration" },
+                { name: "Deer Placenta", sku: "AA-006", price: "RM 4500.00", priceOld: null, rating: 4, reviews: 33, badge: "In Stock", badgeClass: "blue", icon: "✨", image: "images/products/deerplacenta.png", desc: "Advanced exosome regeneration" },
+                { name: "Sheep Placenta", sku: "AA-007", price: "RM 3500.00", priceOld: null, rating: 4, reviews: 33, badge: "In Stock", badgeClass: "blue", icon: "✨", image: "images/products/Sheepplacenta.jpeg", desc: "Advanced exosome regeneration" },
+                { name: "Peach Ceramide Stem cell Solution", sku: "AA-008", price: "RM 9000.00", priceOld: null, rating: 4, reviews: 33, badge: "In Stock", badgeClass: "blue", icon: "✨", image: "images/products/peachceramide.png", desc: "Advanced exosome regeneration" }
             ]
         },
         stemcell: {
             name: "🧬 Stem Cell Therapy",
             description: "Advanced regenerative and cellular therapy solutions",
             products: [
-                { name: "NCKX5 Exchanger", sku: "SC-001", price: "RM 599.00", priceOld: null, rating: 5, reviews: 22, badge: null, badgeClass: null, icon: "🧬", image: "images/products/NCKX5.jpeg", desc: "Stem cell rejuvenation" },
+                { name: "NCKX5 Exchanger", sku: "SC-001", price: "RM 599.00", priceOld: null, rating: 5, reviews: 22, badge: "In Stock", badgeClass: "gold", icon: "🧬", image: "images/products/NCKX5.jpeg", desc: "Stem cell rejuvenation" },
                 { name: "Stem Cell Juice", sku: "SC-002", price: "RM 279.00", priceOld: null, rating: 4, reviews: 19, badge: "Coming Soon", badgeClass: "blue", icon: "🧬", image: "images/products/comingsoon.jpg", desc: "Coming Soon / Available" },
                 { name: "SLC III", sku: "SC-003", price: "RM 279.00", priceOld: null, rating: 4, reviews: 19, badge: "Coming Soon", badgeClass: "blue", icon: "🧬", image: "images/products/comingsoon.jpg", desc: "Coming Soon / Available" }
             ]
@@ -49,17 +49,17 @@ document.addEventListener('DOMContentLoaded', function() {
             name: "⚡ Fat Loss & Metabolic Health",
             description: "Effective weight management and metabolic health solutions",
             products: [
-                { name: "Retra - Pure ", sku: "SL-001", price: "RM 450.00", priceOld: null, rating: 5, reviews: 12, badge: "New", badgeClass: "green", icon: "💉", image: "images/products/Retra.jpeg", desc: "Next-Generation Triple-Hormone Peptide" },
-                { name: "Mounjaro", sku: "SL-002", price: "RM 500.00", priceOld: null, rating: 5, reviews: 12, badge: "New", badgeClass: "green", icon: "💉", image: "images/products/Mounjaro.jpeg", desc: "Next-Generation Triple-Hormone Peptide" }
+                { name: "Retra - Pure ", sku: "SL-001", price: "RM 450.00", priceOld: null, rating: 5, reviews: 12, badge: "In Stock", badgeClass: "green", icon: "💉", image: "images/products/Retra.jpeg", desc: "Next-Generation Triple-Hormone Peptide" },
+                { name: "Mounjaro", sku: "SL-002", price: "RM 500.00", priceOld: null, rating: 5, reviews: 12, badge: "In Stock", badgeClass: "green", icon: "💉", image: "images/products/Mounjaro.jpeg", desc: "Next-Generation Triple-Hormone Peptide" }
             ]
         },
         wellness: {
             name: "🌿 Wellness",
             description: "Holistic wellness and health supplements",
             products: [
-                { name: "GHK-Cu 50mg", sku: "HC-001", price: "RM 259.00", priceOld: null, rating: 5, reviews: 34, badge: "Best Seller", badgeClass: "gold", icon: "💇", image: "images/products/GHKCU50MG.jpEg", desc: "Copper peptide hair therapy" },
-                { name: "GHK-Cu 100mg", sku: "HC-002", price: "RM 159.00", priceOld: null, rating: 4, reviews: 21, badge: "New", badgeClass: "green", icon: "💇", image: "images/products/GHKCU.jpeg", desc: "Advanced hair growth formula" },
-                { name: "NAD+", sku: "HC-003", price: "RM 650.00", priceOld: null, rating: 4, reviews: 27, badge: null, badgeClass: null, icon: "💇", image: "images/products/NAD.jpeg", desc: "Scalp rejuvenation" },
+                { name: "GHK-Cu 50mg", sku: "HC-001", price: "RM 259.00", priceOld: null, rating: 5, reviews: 34, badge: "In Stock", badgeClass: "gold", icon: "💇", image: "images/products/GHKCU50MG.jpEg", desc: "Copper peptide hair therapy" },
+                { name: "GHK-Cu 100mg", sku: "HC-002", price: "RM 159.00", priceOld: null, rating: 4, reviews: 21, badge: "In Stock", badgeClass: "green", icon: "💇", image: "images/products/GHKCU.jpeg", desc: "Advanced hair growth formula" },
+                { name: "NAD+", sku: "HC-003", price: "RM 650.00", priceOld: null, rating: 4, reviews: 27, badge: "In Stock", badgeClass: "gold", icon: "💇", image: "images/products/NAD.jpeg", desc: "Scalp rejuvenation" },
                 
             ]
         },
@@ -67,9 +67,9 @@ document.addEventListener('DOMContentLoaded', function() {
             name: "💊 Supplements",
             description: "Premium nutritional and health supplements",
             products: [
-                { name: "NCKX5 Gluta-Caps", sku: "SU-001", price: "RM 249.00", priceOld: null, rating: 5, reviews: 34, badge: "Best Seller", badgeClass: "gold", icon: "💊", image: "images/products/GlutaCaps.jpeg", desc: "Glutathione capsules" },
-                { name: "Fairplus III", sku: "SU-002", price: "RM 800.00", priceOld: null, rating: 4, reviews: 21, badge: "New", badgeClass: "green", icon: "💊", image: "images/products/fairpluscapsules.jpeg", desc: "Health supplement" },
-                { name: "Dcell Capsules", sku: "SU-003", price: "RM 800.00", priceOld: null, rating: 5, reviews: 27, badge: null, badgeClass: null, icon: "💊", image: "images/products/Dcell.jpeg", desc: "Nutritional support" },
+                { name: "NCKX5 Gluta-Caps", sku: "SU-001", price: "RM 249.00", priceOld: null, rating: 5, reviews: 34, badge: "In Stock", badgeClass: "gold", icon: "💊", image: "images/products/GlutaCaps.jpeg", desc: "Glutathione capsules" },
+                { name: "Fairplus III", sku: "SU-002", price: "RM 800.00", priceOld: null, rating: 4, reviews: 21, badge: "In Stock", badgeClass: "green", icon: "💊", image: "images/products/fairpluscapsules.jpeg", desc: "Health supplement" },
+                { name: "Dcell Capsules", sku: "SU-003", price: "RM 800.00", priceOld: null, rating: 5, reviews: 27, badge: "In Stock", badgeClass: "gold", icon: "💊", image: "images/products/Dcell.jpeg", desc: "Nutritional support" },
                 { name: "Qiora Stemcell Juice", sku: "SU-004", price: "RM 79.00", priceOld: null, rating: 4, reviews: 15, badge: "Coming Soon", badgeClass: "blue", icon: "💊", image: "images/products/comingsoon.jpg", desc: "Daily supplement" }
             ]
         }
@@ -89,81 +89,98 @@ document.addEventListener('DOMContentLoaded', function() {
         productsGrid: !!productsGrid
     });
 
+    // ================= RENDER PRODUCTS =================
+
     function renderProducts(categoryKey) {
-    console.log('🖱️ Rendering category:', categoryKey);
-    const category = productData[categoryKey];
-    if (!category) {
-        console.log('❌ Category not found:', categoryKey);
-        return;
-    }
+        console.log('🖱️ Rendering category:', categoryKey);
+        const category = productData[categoryKey];
+        if (!category) {
+            console.log('❌ Category not found:', categoryKey);
+            return;
+        }
 
-    displayTitle.textContent = category.name;
-    displayDesc.textContent = category.description;
+        displayTitle.textContent = category.name;
+        displayDesc.textContent = category.description;
 
-    let html = '';
-    category.products.forEach((p, index) => {
-        let stars = '';
-        for (let i = 0; i < 5; i++) stars += i < p.rating ? '★' : '☆';
-        let priceHtml = `<span class="price">${p.price}</span>`;
-        if (p.priceOld) priceHtml += ` <span class="price-old">${p.priceOld}</span>`;
-        let badgeHtml = p.badge ? `<span class="product-badge ${p.badgeClass}">${p.badge}</span>` : '';
+        let html = '';
+        category.products.forEach((p, index) => {
+            let stars = '';
+            for (let i = 0; i < 5; i++) stars += i < p.rating ? '★' : '☆';
+            let priceHtml = `<span class="price">${p.price}</span>`;
+            if (p.priceOld) priceHtml += ` <span class="price-old">${p.priceOld}</span>`;
+            let badgeHtml = p.badge ? `<span class="product-badge ${p.badgeClass}">${p.badge}</span>` : '';
 
-        // Clean price for addToCart function (remove "RM " and commas)
+            // ✅ KEPT: Clean price for addToCart function (remove "RM " and commas)
             const cleanPrice = parseFloat(p.price.replace(/[RM,]/g, '').trim());
 
-        html += `
-            <div class="product-card">
-                <div class="product-image">
-                    ${badgeHtml}
-                    ${p.image ? `<img src="${p.image}" alt="${p.name}" class="product-img" loading="lazy">` : `<span class="product-icon">${p.icon}</span>`}
-                </div>
-                <div class="product-info">
-                    <h3>${p.name}</h3>
-                    <div class="product-rating">
-                        <span class="stars">${stars}</span>
-                        <span class="rating-count">(${p.reviews})</span>
-                    </div>
-                    <p class="product-description">${p.desc}</p>
-                    <div class="product-meta">
-                        <span class="product-code">${p.sku}</span>
-                        <span class="product-status available">In Stock</span>
-                    </div>
-                    <div class="product-price">${priceHtml}</div>
-
-                    <!-- ✅ ADD TO CART BUTTON - ADD THIS HERE -->
+            // ================================================================
+            // ✅ CHECK: If product has "Coming Soon" badge - HIDE Add to Cart
+            // ================================================================
+            const isComingSoon = p.badge === 'Coming Soon';
+            
+            // ================================================================
+            // ✅ Add to Cart button - ONLY show if NOT Coming Soon
+            // ================================================================
+            let addToCartHTML = '';
+            if (!isComingSoon) {
+                addToCartHTML = `
                     <button class="add-to-cart-btn" 
                             onclick="addToCart('${p.sku}', '${p.name.replace(/'/g, "\\'")}', ${cleanPrice}, '${p.image || ''}')">
                         🛒 Add to Cart
                     </button>
-                    
-                    <a href="product-detail.html?id=${p.sku}" class="product-btn">View Details →</a>
-                </div>
-            </div>
-        `;
-    });
+                `;
+            }
 
-    productsGrid.innerHTML = html;
-    productsDisplay.style.display = 'block';
-    categorySection.style.display = 'none';
-    productsDisplay.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    console.log('✅ Products rendered for:', categoryKey);
-}
+            html += `
+                <div class="product-card">
+                    <div class="product-image">
+                        ${badgeHtml}
+                        ${p.image ? `<img src="${p.image}" alt="${p.name}" class="product-img" loading="lazy">` : `<span class="product-icon">${p.icon}</span>`}
+                    </div>
+                    <div class="product-info">
+                        <h3>${p.name}</h3>
+                        <div class="product-rating">
+                            <span class="stars">${stars}</span>
+                            <span class="rating-count">(${p.reviews})</span>
+                        </div>
+                        <p class="product-description">${p.desc}</p>
+                        <div class="product-meta">
+                            <span class="product-code">${p.sku}</span>
+                            <span class="product-status available">In Stock</span>
+                        </div>
+                        <div class="product-price">${priceHtml}</div>
+
+                        ${addToCartHTML}
+                        
+                        <a href="product-detail.html?id=${p.sku}" class="product-btn">View Details →</a>
+                    </div>
+                </div>
+            `;
+        });
+
+        productsGrid.innerHTML = html;
+        productsDisplay.style.display = 'block';
+        categorySection.style.display = 'none';
+        productsDisplay.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        console.log('✅ Products rendered for:', categoryKey);
+    }
 
     // ================= CATEGORY CARD CLICK =================
     const categoryCards = document.querySelectorAll('.category-card');
     console.log('📦 Category cards found:', categoryCards.length);
 
-   categoryCards.forEach(card => {
-    card.addEventListener('click', function() {
-        const category = this.dataset.category;
-        console.log('🖱️ Category clicked:', category);
-        
-        // ✅ Store the category in sessionStorage
-        sessionStorage.setItem('lastCategory', category);
-        
-        renderProducts(category);
+    categoryCards.forEach(card => {
+        card.addEventListener('click', function() {
+            const category = this.dataset.category;
+            console.log('🖱️ Category clicked:', category);
+            
+            // ✅ Store the category in sessionStorage
+            sessionStorage.setItem('lastCategory', category);
+            
+            renderProducts(category);
+        });
     });
-});
+
     // ================= BACK BUTTON =================
     backBtn.addEventListener('click', function() {
         console.log('⬅️ Back button clicked');

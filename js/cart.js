@@ -218,18 +218,33 @@ window.removeFromCart = async function (productId) {
     }
 };
 
-// ================= CHECKOUT =================
+/// ================================================================
+// GO TO CHECKOUT
+// ================================================================
 
-window.checkout = function () {
+window.goToCheckout = function() {
     const user = firebase.auth().currentUser;
     if (!user) {
-        alert('Please log in to checkout.');
+        alert('Please log in to proceed to checkout.');
+        localStorage.setItem('redirectAfterLogin', 'checkout.html');
         window.location.href = 'login.html';
         return;
     }
-
-    alert('🛒 Checkout functionality coming soon!');
-    // window.location.href = 'checkout.html';
+    
+    // Check if cart has items
+    firebase.firestore().collection('users').doc(user.uid).collection('cart').get()
+        .then(snapshot => {
+            if (snapshot.empty) {
+                alert('Your cart is empty. Please add items before checking out.');
+                window.location.href = 'products.html';
+                return;
+            }
+            window.location.href = 'checkout.html';
+        })
+        .catch(error => {
+            console.error('Error checking cart:', error);
+            window.location.href = 'checkout.html';
+        });
 };
 
 // ================= NAVIGATION UPDATE - ADD CART COUNT =================

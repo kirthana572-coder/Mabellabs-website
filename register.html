@@ -34,8 +34,8 @@
                     <li id="navLogin"><a href="login.html">Login</a></li>
                     <li id="navRegister"><a href="register.html" class="active">Register</a></li>
                     <li id="navCart"><a href="#" onclick="goToCart()">Cart</a></li>
-                    <li id="navLogout" style="display: none;"><a href="#" onclick="logout()">🚪 Logout</a></li>
-                     <li id="navProfile" style="display: none;"><a href="profile.html">👤 My Profile</a></li>
+                    <li id="navLogout" style="display: none;"><a href="#" onclick="logout()">Logout</a></li>
+                    <li id="navProfile" style="display: none;"><a href="profile.html">My Profile</a></li>
                 </ul>
             </nav>
         </div>
@@ -106,14 +106,18 @@
         </div>
     </section>
 
-    <!-- Success Confirmation Modal -->
+    <!-- ================================================================ -->
+    <!-- SUCCESS MODAL - Shows after successful registration              -->
+    <!-- Tells the user to verify their email before logging in           -->
+    <!-- ================================================================ -->
     <div id="registerSuccessModal" class="modal" style="display: none;">
         <div class="modal-content" style="text-align: center;">
             <div class="success-icon" style="width: 70px; height: 70px; background: #d4edda; color: #28a745; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; font-size: 36px; font-weight: bold; border: 2px solid #c3e6cb;">✓</div>
-            <h2>Registration Successful!</h2>
-            <p>Your MABELLABS Malaysia account has been created successfully.</p>
-            <p style="font-size: 13px; color: #777; margin-top: -10px; margin-bottom: 25px;">You are now logged in and ready to explore.</p>
-            <button id="goToHomeBtn" class="auth-btn" style="max-width: 220px; margin: 0 auto;">Go to Home</button>
+            <h2>✅ Account Created!</h2>
+            <!-- ✅ UPDATED: Verification message -->
+            <p id="successMessage">A verification email has been sent to your email address. Please verify your email before logging in.</p>
+            <p style="font-size: 13px; color: #777; margin-top: -10px; margin-bottom: 25px;">Check your inbox and spam folder.</p>
+            <button id="goToLoginBtn" class="auth-btn" style="max-width: 220px; margin: 0 auto;">Go to Login</button>
         </div>
     </div>
 
