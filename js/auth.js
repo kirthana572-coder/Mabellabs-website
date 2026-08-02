@@ -21,6 +21,18 @@ console.log('✅ Firebase initialized!');
 
 let currentUser = null;
 
+// Reliable auth accessors — currentUser is null until Firebase restores the session.
+window.getAuthUser = function () {
+    return currentUser || firebase.auth().currentUser;
+};
+
+window.whenAuthReady = function (callback) {
+    const unsubscribe = firebase.auth().onAuthStateChanged(function (user) {
+        unsubscribe();
+        callback(user);
+    });
+};
+
 // ================= HELPER FUNCTIONS =================
 
 function isValidEmail(email) {
@@ -302,10 +314,11 @@ function updateNavigation(user) {
 firebase.auth().onAuthStateChanged((user) => {
     currentUser = user;
 
+    const run = () => handleAuthState(currentUser);
     if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', () => handleAuthState(user));
+        document.addEventListener('DOMContentLoaded', run, { once: true });
     } else {
-        handleAuthState(user);
+        run();
     }
 });
 

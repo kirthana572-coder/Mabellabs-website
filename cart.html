@@ -85,9 +85,7 @@
     
     <!-- Load cart on page load -->
     <script>
-        // Use onAuthStateChanged instead of currentUser — currentUser is null
-        // until Firebase finishes restoring the session (async), so we must wait.
-        firebase.auth().onAuthStateChanged(function(user) {
+        whenAuthReady(function(user) {
             console.log('🛒 Auth state resolved. User:', user ? user.email : 'none');
             if (user) {
                 loadCart();

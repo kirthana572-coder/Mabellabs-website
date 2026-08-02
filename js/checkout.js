@@ -9,58 +9,33 @@ let total = 0;
 let selectedPayment = null;
 
 // ================================================================
-// GO TO CHECKOUT - Called from Cart page
-// ================================================================
-
-window.goToCheckout = function() {
-    const user = firebase.auth().currentUser;
-    if (!user) {
-        alert('Please log in to proceed to checkout.');
-        localStorage.setItem('redirectAfterLogin', 'checkout.html');
-        window.location.href = 'login.html';
-        return;
-    }
-    
-    // Check if cart has items
-    firebase.firestore().collection('users').doc(user.uid).collection('cart').get()
-        .then(snapshot => {
-            if (snapshot.empty) {
-                alert('Your cart is empty. Please add items before checking out.');
-                window.location.href = 'products.html';
-                return;
-            }
-            window.location.href = 'checkout.html';
-        })
-        .catch(error => {
-            console.error('Error checking cart:', error);
-            window.location.href = 'checkout.html';
-        });
-};
-
-// ================================================================
 // LOAD CHECKOUT
 // ================================================================
 
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('🛒 Checkout page loaded');
-    
-    // Check if user is logged in
-    const user = firebase.auth().currentUser;
+function initCheckout(user) {
     if (!user) {
         localStorage.setItem('redirectAfterLogin', 'checkout.html');
         alert('Please log in to proceed to checkout.');
         window.location.href = 'login.html';
         return;
     }
-    
-    // Load user profile data
+
     loadUserProfile(user);
-    
-    // Load cart items
     loadCheckoutItems(user);
-    
-    // Setup event listeners
     setupEventListeners();
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+    if (!document.getElementById('checkoutForm')) return;
+
+    console.log('🛒 Checkout page loaded');
+
+    const user = getAuthUser();
+    if (user) {
+        initCheckout(user);
+    } else {
+        whenAuthReady(initCheckout);
+    }
 });
 
 // ================================================================
@@ -335,7 +310,7 @@ async function proceedToPayment() {
     btn.textContent = 'Processing...';
     
     try {
-        const user = firebase.auth().currentUser;
+        const user = getAuthUser();
         if (!user) {
             alert('Please log in to proceed.');
             window.location.href = 'login.html';
@@ -427,9 +402,3 @@ async function proceedToPayment() {
         btn.textContent = '💳 Proceed to Payment';
     }
 }
-
-// ================================================================
-// ✅ ADDED: Fallback checkout function for cart.html
-// ================================================================
-
-window.checkout = window.goToCheckout;

@@ -6,7 +6,7 @@
 // Add product to cart
 window.addToCart = function (productId, productName, productPrice, productImage) {
     // Check if user is logged in
-    const user = firebase.auth().currentUser;
+    const user = getAuthUser();
 
     if (!user) {
         // Save the product details to add after login
@@ -91,7 +91,7 @@ window.loadCart = async function () {
 
     // currentUser can be null if Firebase hasn't resolved the session yet.
     // Always call loadCart from inside onAuthStateChanged to avoid this.
-    const user = firebase.auth().currentUser;
+    const user = getAuthUser();
     console.log('👤 Current user:', user ? user.email : 'No user');
 
     if (!user) {
@@ -172,7 +172,7 @@ window.loadCart = async function () {
 // ================= UPDATE QUANTITY =================
 
 window.updateQuantity = async function (productId, change) {
-    const user = firebase.auth().currentUser;
+    const user = getAuthUser();
     if (!user) return;
 
     try {
@@ -205,7 +205,7 @@ window.updateQuantity = async function (productId, change) {
 window.removeFromCart = async function (productId) {
     if (!confirm('Remove this item from your cart?')) return;
 
-    const user = firebase.auth().currentUser;
+    const user = getAuthUser();
     if (!user) return;
 
     try {
@@ -222,29 +222,36 @@ window.removeFromCart = async function (productId) {
 // GO TO CHECKOUT
 // ================================================================
 
-window.goToCheckout = function() {
-    const user = firebase.auth().currentUser;
-    if (!user) {
-        alert('Please log in to proceed to checkout.');
-        localStorage.setItem('redirectAfterLogin', 'checkout.html');
-        window.location.href = 'login.html';
-        return;
+window.goToCheckout = function () {
+    const proceed = (user) => {
+        if (!user) {
+            alert('Please log in to proceed to checkout.');
+            localStorage.setItem('redirectAfterLogin', 'checkout.html');
+            window.location.href = 'login.html';
+            return;
+        }
+
+        firebase.firestore().collection('users').doc(user.uid).collection('cart').get()
+            .then(snapshot => {
+                if (snapshot.empty) {
+                    alert('Your cart is empty. Please add items before checking out.');
+                    window.location.href = 'products.html';
+                    return;
+                }
+                window.location.href = 'checkout.html';
+            })
+            .catch(error => {
+                console.error('Error checking cart:', error);
+                window.location.href = 'checkout.html';
+            });
+    };
+
+    const user = getAuthUser();
+    if (user) {
+        proceed(user);
+    } else {
+        whenAuthReady(proceed);
     }
-    
-    // Check if cart has items
-    firebase.firestore().collection('users').doc(user.uid).collection('cart').get()
-        .then(snapshot => {
-            if (snapshot.empty) {
-                alert('Your cart is empty. Please add items before checking out.');
-                window.location.href = 'products.html';
-                return;
-            }
-            window.location.href = 'checkout.html';
-        })
-        .catch(error => {
-            console.error('Error checking cart:', error);
-            window.location.href = 'checkout.html';
-        });
 };
 
 // ================= NAVIGATION UPDATE - ADD CART COUNT =================
