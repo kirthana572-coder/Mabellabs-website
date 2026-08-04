@@ -34,8 +34,15 @@ document.addEventListener('DOMContentLoaded', function() {
                 { name: "Peach Ceramide Stem cell Solution", sku: "AA-008", price: "RM 9000.00", priceOld: null, rating: 4, reviews: 33, badge: "Limited", badgeClass: "blue", icon: "✨", image: "images/products/peachceramide.png", desc: "Advanced exosome regeneration" },
                 { name: "Fairplus III", sku: "SU-002", price: "RM 800.00", priceOld: "RM 89.00", rating: 4, reviews: 21, badge: "New", badgeClass: "green", icon: "💊", image: "images/products/fairpluscapsules.jpeg", desc: "Health supplement" },
                 { name: "Dcell Capsules", sku: "SU-003", price: "RM 800.00", priceOld: null, rating: 5, reviews: 27, badge: null, badgeClass: null, icon: "💊", image: "images/products/Dcell.jpeg", desc: "Nutritional support" },
-                { name: "Retra - Pure ", sku: "SL-001", price: "RM 450.00", priceOld: "RM 350.00", rating: 5, reviews: 12, badge: "New", badgeClass: "green", icon: "💉", image: "images/products/Retra.jpeg", desc: "Next-Generation Triple-Hormone Peptide" },
-                { name: "Mounjaro", sku: "SL-002", price: "RM 500.00", priceOld: "RM 350.00", rating: 5, reviews: 12, badge: "New", badgeClass: "green", icon: "💉", image: "images/products/Mounjaro.jpeg", desc: "Next-Generation Triple-Hormone Peptide" }
+                { name: "Retra - Pure", sku: "SL-001", price: "RM 450.00", priceOld: "RM 350.00", rating: 5, reviews: 12, badge: "New", badgeClass: "green", icon: "💉", image: "images/products/Retra.jpeg", desc: "Next-Generation Triple-Hormone Peptide", dosageOptions: [
+                    { dosage: "10mg", price: 450.00, sku: "SL-001A" },
+                    { dosage: "30mg", price: 900.00, sku: "SL-001B" }
+                ]},
+                { name: "Mounjaro", sku: "SL-002", price: "RM 500.00", priceOld: "RM 350.00", rating: 5, reviews: 12, badge: "New", badgeClass: "green", icon: "💉", image: "images/products/Mounjaro.jpeg", desc: "Next-Generation Triple-Hormone Peptide", dosageOptions: [
+                    { dosage: "2.5mg", price: 500.00, sku: "SL-002A", badge: "STARTER DOSE" },
+                    { dosage: "5mg", price: 660.00, sku: "SL-002B", badge: "MOST POPULAR" },
+                    { dosage: "7.5mg", price: 760.00, sku: "SL-002C", badge: "ADVANCED" }
+                ]}
             
             ]
         },
@@ -99,6 +106,48 @@ document.addEventListener('DOMContentLoaded', function() {
 
     let html = '';
     brand.products.forEach(p => {
+        const hasDosage = p.dosageOptions && p.dosageOptions.length > 0;
+        const defaultDosage = hasDosage ? p.dosageOptions[0] : null;
+        const displayPrice = hasDosage ? formatDosagePrice(defaultDosage.price) : p.price;
+        const isComingSoon = p.badge === 'Coming Soon';
+
+        let dosageHtml = '';
+        if (hasDosage) {
+            dosageHtml = `
+                <div class="dosage-options">
+                    ${p.dosageOptions.map((opt, i) => `
+                        <button type="button"
+                                class="dosage-btn${i === 0 ? ' active' : ''}"
+                                data-sku="${opt.sku}"
+                                data-price="${formatDosagePrice(opt.price)}"
+                                data-dosage="${opt.dosage}">
+                            <span class="dosage-label">${opt.dosage}</span>
+                            ${opt.badge ? `<span class="dosage-option-badge">${opt.badge}</span>` : ''}
+                        </button>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        let addToCartHTML = '';
+        if (!isComingSoon) {
+            if (hasDosage) {
+                addToCartHTML = `
+                    <button type="button" class="add-to-cart-btn"
+                            data-selected-sku="${defaultDosage.sku}"
+                            onclick="addToCartFromBrandCard(this)">
+                        🛒 Add to Cart
+                    </button>
+                `;
+            } else {
+                addToCartHTML = `
+                    <button type="button" class="add-to-cart-btn" onclick="addToCart('${p.sku}')">
+                        🛒 Add to Cart
+                    </button>
+                `;
+            }
+        }
+
         html += `
             <div class="brand-product-card">
                 <div class="product-image">
@@ -107,19 +156,59 @@ document.addEventListener('DOMContentLoaded', function() {
                 <div class="product-info">
                     <h3>${p.name}</h3>
                     <p class="product-desc">${p.desc}</p>
-                    <div class="product-price">${p.price}</div>
-                    <a href="product-detail.html?id=${p.sku}" class="product-btn">View Details →</a>
+                    <div class="product-price">${displayPrice}</div>
+                    ${dosageHtml}
+                    <div class="product-actions">
+                        ${addToCartHTML}
+                        <a href="product-detail.html?id=${p.sku}" class="product-btn">View Details →</a>
+                    </div>
                 </div>
             </div>
         `;
     });
 
     brandProductsGrid.innerHTML = html;
+
+    brandProductsGrid.querySelectorAll('.dosage-btn').forEach(btn => {
+        btn.addEventListener('click', function () {
+            selectBrandDosage(this);
+        });
+    });
+
     brandsSection.style.display = 'none';
     brandProductsDisplay.style.display = 'block';
     brandProductsDisplay.scrollIntoView({ behavior: 'smooth', block: 'start' });
     console.log('✅ Products rendered for brand:', brandKey);
 }
+
+    function formatDosagePrice(price) {
+        if (typeof price === 'number') return `RM ${price.toFixed(2)}`;
+        return price;
+    }
+
+    window.selectBrandDosage = function (btn) {
+        const card = btn.closest('.brand-product-card');
+        card.querySelectorAll('.dosage-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+
+        const priceEl = card.querySelector('.product-price');
+        if (priceEl) priceEl.textContent = btn.dataset.price;
+
+        const addBtn = card.querySelector('.add-to-cart-btn');
+        if (addBtn) {
+            addBtn.dataset.selectedSku = btn.dataset.sku;
+            addBtn.disabled = false;
+        }
+    };
+
+    window.addToCartFromBrandCard = function (btn) {
+        const sku = btn.dataset.selectedSku;
+        if (!sku) {
+            btn.disabled = true;
+            return;
+        }
+        addToCart(sku);
+    };
 
     // ================= BRAND CARD CLICK =================
     document.querySelectorAll('.brand-card').forEach(card => {

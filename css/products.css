@@ -848,6 +848,71 @@
     box-shadow: none !important;
 }
 
+/* ================= DOSAGE OPTIONS ================= */
+
+.dosage-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 10px 0 12px;
+}
+
+.dosage-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    padding: 10px 14px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    background: #fff;
+    color: #333;
+    font-size: 13px;
+    font-weight: 600;
+    font-family: 'Poppins', sans-serif;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    min-width: 72px;
+}
+
+.dosage-label {
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.dosage-option-badge {
+    font-size: 9px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    padding: 2px 6px;
+    border-radius: 4px;
+    background: rgba(122, 33, 12, 0.1);
+    color: #7A210C;
+    white-space: nowrap;
+}
+
+.dosage-btn:hover {
+    border-color: #7A210C;
+    color: #7A210C;
+}
+
+.dosage-btn:hover .dosage-option-badge {
+    background: rgba(122, 33, 12, 0.15);
+}
+
+.dosage-btn.active {
+    background: #7A210C;
+    border-color: #7A210C;
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(122, 33, 12, 0.25);
+}
+
+.dosage-btn.active .dosage-option-badge {
+    background: rgba(255, 255, 255, 0.25);
+    color: #fff;
+}
+
 /* Cart icon inside button */
 .add-to-cart-btn .cart-icon {
     margin-right: 8px;

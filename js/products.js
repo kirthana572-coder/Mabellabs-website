@@ -49,8 +49,15 @@ document.addEventListener('DOMContentLoaded', function() {
             name: "⚡ Fat Loss & Metabolic Health",
             description: "Effective weight management and metabolic health solutions",
             products: [
-                { name: "Retra - Pure ", sku: "SL-001", price: "RM 450.00", priceOld: null, rating: 5, reviews: 12, badge: "In Stock", badgeClass: "green", icon: "💉", image: "images/products/Retra.jpeg", desc: "Next-Generation Triple-Hormone Peptide" },
-                { name: "Mounjaro", sku: "SL-002", price: "RM 500.00", priceOld: null, rating: 5, reviews: 12, badge: "In Stock", badgeClass: "green", icon: "💉", image: "images/products/Mounjaro.jpeg", desc: "Next-Generation Triple-Hormone Peptide" }
+                { name: "Retra - Pure", sku: "SL-001", price: "RM 450.00", priceOld: null, rating: 5, reviews: 12, badge: "In Stock", badgeClass: "green", icon: "💉", image: "images/products/Retra.jpeg", desc: "Next-Generation Triple-Hormone Peptide", dosageOptions: [
+                    { dosage: "10mg", price: 450.00, sku: "SL-001A" },
+                    { dosage: "30mg", price: 900.00, sku: "SL-001B" }
+                ]},
+                { name: "Mounjaro", sku: "SL-002", price: "RM 500.00", priceOld: null, rating: 5, reviews: 12, badge: "In Stock", badgeClass: "green", icon: "💉", image: "images/products/Mounjaro.jpeg", desc: "Next-Generation Triple-Hormone Peptide", dosageOptions: [
+                    { dosage: "2.5mg", price: 500.00, sku: "SL-002A", badge: "STARTER DOSE" },
+                    { dosage: "5mg", price: 660.00, sku: "SL-002B", badge: "MOST POPULAR" },
+                    { dosage: "7.5mg", price: 760.00, sku: "SL-002C", badge: "ADVANCED" }
+                ]}
             ]
         },
         wellness: {
@@ -91,6 +98,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // ================= RENDER PRODUCTS =================
 
+    function formatDosagePrice(price) {
+        if (typeof price === 'number') return `RM ${price.toFixed(2)}`;
+        return price;
+    }
+
     function renderProducts(categoryKey) {
         console.log('🖱️ Rendering category:', categoryKey);
         const category = productData[categoryKey];
@@ -106,29 +118,52 @@ document.addEventListener('DOMContentLoaded', function() {
         category.products.forEach((p, index) => {
             let stars = '';
             for (let i = 0; i < 5; i++) stars += i < p.rating ? '★' : '☆';
-            let priceHtml = `<span class="price">${p.price}</span>`;
+
+            const hasDosage = p.dosageOptions && p.dosageOptions.length > 0;
+            const defaultDosage = hasDosage ? p.dosageOptions[0] : null;
+            const displayPrice = hasDosage ? formatDosagePrice(defaultDosage.price) : p.price;
+
+            let priceHtml = `<span class="price">${displayPrice}</span>`;
             if (p.priceOld) priceHtml += ` <span class="price-old">${p.priceOld}</span>`;
             let badgeHtml = p.badge ? `<span class="product-badge ${p.badgeClass}">${p.badge}</span>` : '';
 
-            // ✅ KEPT: Clean price for addToCart function (remove "RM " and commas)
-            const cleanPrice = parseFloat(p.price.replace(/[RM,]/g, '').trim());
-
-            // ================================================================
-            // ✅ CHECK: If product has "Coming Soon" badge - HIDE Add to Cart
-            // ================================================================
             const isComingSoon = p.badge === 'Coming Soon';
-            
-            // ================================================================
-            // ✅ Add to Cart button - ONLY show if NOT Coming Soon
-            // ================================================================
+
+            let dosageHtml = '';
+            if (hasDosage) {
+                dosageHtml = `
+                    <div class="dosage-options">
+                        ${p.dosageOptions.map((opt, i) => `
+                            <button type="button"
+                                    class="dosage-btn${i === 0 ? ' active' : ''}"
+                                    data-sku="${opt.sku}"
+                                    data-price="${formatDosagePrice(opt.price)}"
+                                    data-dosage="${opt.dosage}">
+                                <span class="dosage-label">${opt.dosage}</span>
+                                ${opt.badge ? `<span class="dosage-option-badge">${opt.badge}</span>` : ''}
+                            </button>
+                        `).join('')}
+                    </div>
+                `;
+            }
+
             let addToCartHTML = '';
             if (!isComingSoon) {
-                addToCartHTML = `
-                    <button class="add-to-cart-btn" 
-                            onclick="addToCart('${p.sku}', '${p.name.replace(/'/g, "\\'")}', ${cleanPrice}, '${p.image || ''}')">
-                        🛒 Add to Cart
-                    </button>
-                `;
+                if (hasDosage) {
+                    addToCartHTML = `
+                        <button class="add-to-cart-btn"
+                                data-selected-sku="${defaultDosage.sku}"
+                                onclick="addToCartFromCard(this)">
+                            🛒 Add to Cart
+                        </button>
+                    `;
+                } else {
+                    addToCartHTML = `
+                        <button class="add-to-cart-btn" onclick="addToCart('${p.sku}')">
+                            🛒 Add to Cart
+                        </button>
+                    `;
+                }
             }
 
             html += `
@@ -149,6 +184,7 @@ document.addEventListener('DOMContentLoaded', function() {
                             <span class="product-status available">In Stock</span>
                         </div>
                         <div class="product-price">${priceHtml}</div>
+                        ${dosageHtml}
 
                         ${addToCartHTML}
                         
@@ -159,6 +195,12 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 
         productsGrid.innerHTML = html;
+
+        productsGrid.querySelectorAll('.dosage-btn').forEach(btn => {
+            btn.addEventListener('click', function () {
+                selectDosage(this);
+            });
+        });
         productsDisplay.style.display = 'block';
         categorySection.style.display = 'none';
         productsDisplay.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -327,6 +369,32 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Make renderProducts available globally
     window.renderProducts = renderProducts;
+
+    // ================= DOSAGE SELECTION =================
+
+    window.selectDosage = function (btn) {
+        const card = btn.closest('.product-card');
+        card.querySelectorAll('.dosage-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+
+        const priceEl = card.querySelector('.product-price .price');
+        if (priceEl) priceEl.textContent = btn.dataset.price;
+
+        const addBtn = card.querySelector('.add-to-cart-btn');
+        if (addBtn) {
+            addBtn.dataset.selectedSku = btn.dataset.sku;
+            addBtn.disabled = false;
+        }
+    };
+
+    window.addToCartFromCard = function (btn) {
+        const sku = btn.dataset.selectedSku;
+        if (!sku) {
+            btn.disabled = true;
+            return;
+        }
+        addToCart(sku);
+    };
 
     console.log('✅ Products page ready!');
 });

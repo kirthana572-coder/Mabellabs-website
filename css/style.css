@@ -8,6 +8,81 @@ body {
     font-family: 'Poppins', sans-serif;
     background: #F8F8F8;
     color: #333;
+    cursor: default;
+}
+
+/* ================= CURSOR BEHAVIOUR ================= */
+
+html {
+    cursor: default;
+}
+
+/* Default arrow for non-interactive content */
+p, h1, h2, h3, h4, h5, h6, li, td, th, figcaption, blockquote {
+    cursor: default;
+}
+
+img, svg, video, canvas, picture {
+    cursor: default;
+}
+
+/* Hand icon for clickable elements */
+a,
+button,
+input[type="button"],
+input[type="submit"],
+input[type="reset"],
+input[type="checkbox"],
+input[type="radio"],
+select,
+summary,
+[role="button"],
+[onclick],
+.btn,
+.logo,
+.category-card,
+.product-card .product-btn,
+.add-to-cart-btn,
+.dosage-btn,
+.checkout-btn,
+.proceed-btn,
+.qty-btn,
+.remove-btn,
+.delivery-option,
+.payment-option,
+.delivery-label,
+.payment-label,
+.terms-checkbox,
+label,
+.faq-question,
+.brand-tab,
+.brand-product-card,
+.search-btn,
+.back-btn,
+.back-to-products,
+.avatar-icon,
+.footer-links a,
+nav ul li a {
+    cursor: pointer;
+}
+
+/* Text cursor only for editable fields */
+input:not([type="button"]):not([type="submit"]):not([type="reset"]):not([type="checkbox"]):not([type="radio"]):not([type="file"]):not([type="image"]),
+textarea,
+[contenteditable="true"] {
+    cursor: text;
+}
+
+/* Not-allowed for disabled elements */
+button:disabled,
+input:disabled,
+textarea:disabled,
+select:disabled,
+.add-to-cart-btn:disabled,
+.proceed-btn:disabled,
+.checkout-btn:disabled,
+.btn:disabled {
+    cursor: not-allowed;
 }
 
 /* ================= ANIMATIONS ================= */
@@ -81,6 +156,7 @@ header .container {
     gap: 15px;
     flex-shrink: 0;
     animation: logoFadeIn 1.2s ease forwards;
+    cursor: pointer;
 }
 
 .logo img {
@@ -167,6 +243,7 @@ nav ul li a {
     position: relative;
     white-space: nowrap;
     border-radius: 6px;
+    cursor: pointer;
 }
 
 nav ul li a::after {
@@ -326,6 +403,7 @@ nav ul li a.register-btn:hover {
     overflow: hidden;
     animation: fadeInUp 0.8s ease 0.7s forwards;
     opacity: 0;
+    cursor: pointer;
 }
 
 .btn:hover {

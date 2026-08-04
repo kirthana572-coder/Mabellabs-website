@@ -105,6 +105,12 @@
     margin-bottom: 5px;
 }
 
+.cart-item-dosage {
+    font-size: 14px;
+    font-weight: 500;
+    color: #7A210C;
+}
+
 .cart-item-price {
     font-size: 16px;
     color: #7A210C;

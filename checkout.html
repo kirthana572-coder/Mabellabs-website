@@ -66,7 +66,7 @@
                 <!-- ============================================================ -->
                 <!-- LEFT COLUMN - Shipping & Payment Info                        -->
                 <!-- ============================================================ -->
-                <div class="checkout-left">
+                <div class="checkout-left" id="checkoutForm">
 
                     <!-- ========================================================== -->
                     <!-- 1. SHIPPING INFORMATION                                    -->
@@ -194,60 +194,12 @@
                         <h2 class="section-card-title">💳 Payment Method</h2>
                         
                         <div class="payment-options">
-                            <div class="payment-option" data-payment="chip">
-                                <input type="radio" name="paymentMethod" id="paymentChip" value="chip">
-                                <label for="paymentChip" class="payment-label">
+                            <div class="payment-option selected" data-payment="toyyibpay">
+                                <input type="radio" name="paymentMethod" id="paymentToyyibpay" value="toyyibpay" checked>
+                                <label for="paymentToyyibpay" class="payment-label">
                                     <span class="payment-icon">💳</span>
-                                    <span class="payment-name">CHIP</span>
-                                    <span class="payment-badge">Coming Soon</span>
-                                </label>
-                            </div>
-                            
-                            <div class="payment-option" data-payment="fpx">
-                                <input type="radio" name="paymentMethod" id="paymentFpx" value="fpx">
-                                <label for="paymentFpx" class="payment-label">
-                                    <span class="payment-icon">🏦</span>
-                                    <span class="payment-name">FPX Online Banking</span>
-                                </label>
-                            </div>
-                            
-                            <div class="payment-option" data-payment="card">
-                                <input type="radio" name="paymentMethod" id="paymentCard" value="card">
-                                <label for="paymentCard" class="payment-label">
-                                    <span class="payment-icon">💳</span>
-                                    <span class="payment-name">Debit / Credit Card</span>
-                                </label>
-                            </div>
-                            
-                            <div class="payment-option" data-payment="duitnow">
-                                <input type="radio" name="paymentMethod" id="paymentDuitnow" value="duitnow">
-                                <label for="paymentDuitnow" class="payment-label">
-                                    <span class="payment-icon">📱</span>
-                                    <span class="payment-name">DuitNow QR</span>
-                                </label>
-                            </div>
-                            
-                            <div class="payment-option" data-payment="tng">
-                                <input type="radio" name="paymentMethod" id="paymentTng" value="tng">
-                                <label for="paymentTng" class="payment-label">
-                                    <span class="payment-icon">💚</span>
-                                    <span class="payment-name">Touch 'n Go eWallet</span>
-                                </label>
-                            </div>
-                            
-                            <div class="payment-option" data-payment="grabpay">
-                                <input type="radio" name="paymentMethod" id="paymentGrabpay" value="grabpay">
-                                <label for="paymentGrabpay" class="payment-label">
-                                    <span class="payment-icon">🟢</span>
-                                    <span class="payment-name">GrabPay</span>
-                                </label>
-                            </div>
-                            
-                            <div class="payment-option" data-payment="boost">
-                                <input type="radio" name="paymentMethod" id="paymentBoost" value="boost">
-                                <label for="paymentBoost" class="payment-label">
-                                    <span class="payment-icon">🔵</span>
-                                    <span class="payment-name">Boost</span>
+                                    <span class="payment-name">ToyyibPay</span>
+                                    <span class="payment-badge">FPX / Card / DuitNow QR / E-Wallet</span>
                                 </label>
                             </div>
                         </div>
@@ -294,15 +246,15 @@
                         
                         <div class="summary-row">
                             <span class="summary-label">Subtotal</span>
-                            <span class="summary-value" id="summarySubtotal">RM 0.00</span>
+                            <span class="summary-value" id="summarySubtotal">—</span>
                         </div>
                         <div class="summary-row">
                             <span class="summary-label">Shipping Fee</span>
-                            <span class="summary-value" id="summaryShipping">RM 8.00</span>
+                            <span class="summary-value" id="summaryShipping">—</span>
                         </div>
                         <div class="summary-row total">
                             <span class="summary-label">Total</span>
-                            <span class="summary-value" id="summaryTotal">RM 0.00</span>
+                            <span class="summary-value" id="summaryTotal">—</span>
                         </div>
                         
                         <button class="proceed-btn" id="proceedBtn" disabled>

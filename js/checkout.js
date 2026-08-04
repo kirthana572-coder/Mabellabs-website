@@ -4,9 +4,54 @@
 
 let cartItems = [];
 let subtotal = 0;
-let shippingFee = 8.00;
+let shippingFee = 0;
 let total = 0;
 let selectedPayment = null;
+
+// ================================================================
+// HELPERS
+// ================================================================
+
+function parsePrice(price) {
+    if (typeof price === 'number') return price;
+    return parseFloat(String(price).replace(/[RM,\s]/g, '')) || 0;
+}
+
+async function fetchCartFromFirestore(uid) {
+    const cartRef = firebase.firestore().collection('users').doc(uid).collection('cart');
+    const snapshot = await cartRef.get();
+
+    const items = [];
+    let calculatedSubtotal = 0;
+
+    snapshot.forEach(doc => {
+        const data = doc.data();
+        const price = parsePrice(data.productPrice);
+        const quantity = data.quantity || 1;
+        const lineTotal = price * quantity;
+        calculatedSubtotal += lineTotal;
+
+        items.push({
+            productId: data.productId || doc.id,
+            productName: data.productName || 'Product',
+            productPrice: price,
+            productImage: data.productImage || '',
+            dosage: data.dosage || '',
+            quantity: quantity,
+            lineTotal: lineTotal
+        });
+    });
+
+    const calculatedShipping = 0;
+    const calculatedTotal = calculatedSubtotal + calculatedShipping;
+
+    return {
+        items,
+        subtotal: calculatedSubtotal,
+        shippingFee: calculatedShipping,
+        total: calculatedTotal
+    };
+}
 
 // ================================================================
 // LOAD CHECKOUT
@@ -26,7 +71,7 @@ function initCheckout(user) {
 }
 
 document.addEventListener('DOMContentLoaded', function () {
-    if (!document.getElementById('checkoutForm')) return;
+    if (!document.getElementById('orderItems')) return;
 
     console.log('🛒 Checkout page loaded');
 
@@ -63,12 +108,16 @@ async function loadUserProfile(user) {
 
 async function loadCheckoutItems(user) {
     const container = document.getElementById('orderItems');
-    
+
     try {
-        const cartRef = firebase.firestore().collection('users').doc(user.uid).collection('cart');
-        const snapshot = await cartRef.get();
-        
-        if (snapshot.empty) {
+        const cartData = await fetchCartFromFirestore(user.uid);
+
+        if (cartData.items.length === 0) {
+            cartItems = [];
+            subtotal = 0;
+            shippingFee = 0;
+            total = 0;
+
             container.innerHTML = `
                 <div class="empty-cart-checkout">
                     <div class="empty-icon">🛒</div>
@@ -77,37 +126,40 @@ async function loadCheckoutItems(user) {
                     <a href="products.html" class="btn">Browse Products</a>
                 </div>
             `;
+            updateTotals();
             document.getElementById('proceedBtn').disabled = true;
             return;
         }
-        
-        cartItems = [];
-        subtotal = 0;
+
+        cartItems = cartData.items;
+        subtotal = cartData.subtotal;
+        shippingFee = cartData.shippingFee;
+        total = cartData.total;
+
         let html = '';
-        
-        snapshot.forEach(doc => {
-            const item = doc.data();
-            cartItems.push(item);
-            const itemSubtotal = item.productPrice * item.quantity;
-            subtotal += itemSubtotal;
-            
+
+        cartItems.forEach(item => {
+            const nameDisplay = item.dosage
+                ? `${item.productName} (${item.dosage})`
+                : item.productName;
+
             html += `
                 <div class="order-item">
                     <div class="order-item-image">
                         <img src="${item.productImage || 'images/products/placeholder.jpg'}" alt="${item.productName}">
                     </div>
                     <div class="order-item-details">
-                        <div class="order-item-name">${item.productName}</div>
-                        <div class="order-item-meta">Qty: ${item.quantity}</div>
+                        <div class="order-item-name">${nameDisplay}</div>
+                        <div class="order-item-meta">Qty: ${item.quantity} × RM ${item.productPrice.toFixed(2)}</div>
                     </div>
-                    <div class="order-item-price">RM ${itemSubtotal.toFixed(2)}</div>
+                    <div class="order-item-price">RM ${item.lineTotal.toFixed(2)}</div>
                 </div>
             `;
         });
-        
+
         container.innerHTML = html;
         updateTotals();
-        
+
     } catch (error) {
         console.error('Error loading cart:', error);
         alert('Error loading your cart. Please try again.');
@@ -131,14 +183,9 @@ function updateTotals() {
 // ================================================================
 
 function setupEventListeners() {
-    // Delivery method change
+    // Delivery method change (shipping fee disabled for now — set to RM 0.00)
     document.querySelectorAll('input[name="deliveryMethod"]').forEach(radio => {
-        radio.addEventListener('change', function() {
-            const fee = parseFloat(this.closest('.delivery-option').dataset.fee);
-            shippingFee = fee;
-            updateTotals();
-            
-            // Update selected visual
+        radio.addEventListener('change', function () {
             document.querySelectorAll('.delivery-option').forEach(opt => {
                 opt.classList.toggle('selected', opt.querySelector('input').checked);
             });
@@ -158,6 +205,11 @@ function setupEventListeners() {
             validateCheckout();
         });
     });
+
+    const checkedPayment = document.querySelector('input[name="paymentMethod"]:checked');
+    if (checkedPayment) {
+        selectedPayment = checkedPayment.value;
+    }
     
     // Terms checkboxes
     document.querySelectorAll('.terms-checkbox input[type="checkbox"]').forEach(cb => {
@@ -165,7 +217,7 @@ function setupEventListeners() {
     });
     
     // Real-time validation on input
-    document.querySelectorAll('#checkoutForm input, #checkoutForm select').forEach(field => {
+    document.querySelectorAll('#checkoutForm input, #checkoutForm select, #checkoutForm textarea').forEach(field => {
         field.addEventListener('blur', function() {
             validateField(this);
         });
@@ -316,6 +368,23 @@ async function proceedToPayment() {
             window.location.href = 'login.html';
             return;
         }
+
+        // Re-fetch cart from Firestore to ensure totals cannot be manipulated client-side
+        const cartData = await fetchCartFromFirestore(user.uid);
+
+        if (cartData.items.length === 0) {
+            alert('Your cart is empty. Please add items before checking out.');
+            window.location.href = 'products.html';
+            btn.disabled = false;
+            btn.classList.remove('loading');
+            btn.textContent = '💳 Proceed to Payment';
+            return;
+        }
+
+        cartItems = cartData.items;
+        subtotal = cartData.subtotal;
+        shippingFee = cartData.shippingFee;
+        total = cartData.total;
         
         // Get shipping details
         const shippingData = {
@@ -333,7 +402,7 @@ async function proceedToPayment() {
         // Get delivery method
         const deliveryMethod = document.querySelector('input[name="deliveryMethod"]:checked');
         const deliveryLabel = deliveryMethod.closest('.delivery-option').querySelector('.delivery-name').textContent.trim();
-        const deliveryFee = parseFloat(deliveryMethod.closest('.delivery-option').dataset.fee);
+        const deliveryFee = 0;
         
         // Get payment method
         const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked');

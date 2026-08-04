@@ -192,7 +192,90 @@
     font-size: 17px;
     font-weight: 700;
     color: #7A210C;
-    margin-bottom: 12px;
+    margin-bottom: 10px;
+}
+
+.brand-product-card .product-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.brand-product-card .add-to-cart-btn {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    background: #7A210C;
+    color: white;
+    text-align: center;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 13px;
+    font-family: 'Poppins', sans-serif;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+.brand-product-card .add-to-cart-btn:hover {
+    background: #A73718;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(122, 33, 12, 0.25);
+}
+
+.brand-product-card .add-to-cart-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+.brand-product-card .dosage-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 10px;
+}
+
+.brand-product-card .dosage-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    padding: 6px 10px;
+    border: 2px solid #ddd;
+    border-radius: 6px;
+    background: #fff;
+    color: #333;
+    font-size: 11px;
+    font-weight: 600;
+    font-family: 'Poppins', sans-serif;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+.brand-product-card .dosage-btn.active {
+    background: #7A210C;
+    border-color: #7A210C;
+    color: #fff;
+}
+
+.brand-product-card .dosage-option-badge {
+    font-size: 8px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    padding: 1px 4px;
+    border-radius: 3px;
+    background: rgba(122, 33, 12, 0.1);
+    color: #7A210C;
+}
+
+.brand-product-card .dosage-btn.active .dosage-option-badge {
+    background: rgba(255, 255, 255, 0.25);
+    color: #fff;
 }
 
 .brand-product-card .product-btn {

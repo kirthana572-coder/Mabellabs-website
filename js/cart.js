@@ -3,19 +3,12 @@
 
 // ================= CART FUNCTIONS =================
 
-// Add product to cart
-window.addToCart = function (productId, productName, productPrice, productImage) {
-    // Check if user is logged in
+// Add product to cart (SKU only — price fetched from Firestore)
+window.addToCart = function (productSku) {
     const user = getAuthUser();
 
     if (!user) {
-        // Save the product details to add after login
-        localStorage.setItem('pendingProduct', JSON.stringify({
-            productId: productId,
-            productName: productName,
-            productPrice: productPrice,
-            productImage: productImage
-        }));
+        localStorage.setItem('pendingProduct', JSON.stringify({ productSku: productSku }));
         localStorage.setItem('redirectAfterLogin', 'cart.html');
 
         alert('Please log in or create an account to add items to your cart.');
@@ -23,32 +16,48 @@ window.addToCart = function (productId, productName, productPrice, productImage)
         return;
     }
 
-    // User is logged in - add to cart
-    addToCartFirestore(user.uid, productId, productName, productPrice, productImage);
+    addToCartFirestore(user.uid, productSku);
 };
 
-// Add to Firestore
-async function addToCartFirestore(uid, productId, productName, productPrice, productImage) {
+// Fetch product details from Firestore and add to cart
+async function addToCartFirestore(uid, productSku) {
     try {
-        const cartRef = firebase.firestore().collection('users').doc(uid).collection('cart');
+        const productDoc = await firebase.firestore().collection('products').doc(productSku).get();
 
-        // Check if product already exists in cart
-        const existingDoc = await cartRef.doc(productId).get();
+        if (!productDoc.exists) {
+            alert('This product is not available yet. Please try again later.');
+            return;
+        }
+
+        const data = productDoc.data();
+        const productName = data.productName || data.name || 'Product';
+        const productPrice = typeof data.price === 'number'
+            ? data.price
+            : parseFloat(String(data.price).replace(/[RM,\s]/g, ''));
+        const productImage = data.productImage || data.image || '';
+        const dosage = data.dosage || '';
+
+        if (isNaN(productPrice)) {
+            alert('Unable to retrieve product price. Please try again later.');
+            return;
+        }
+
+        const cartRef = firebase.firestore().collection('users').doc(uid).collection('cart');
+        const existingDoc = await cartRef.doc(productSku).get();
 
         if (existingDoc.exists) {
-            // Update quantity
             const currentQty = existingDoc.data().quantity || 1;
-            await cartRef.doc(productId).update({
+            await cartRef.doc(productSku).update({
                 quantity: currentQty + 1,
                 updatedAt: firebase.firestore.FieldValue.serverTimestamp()
             });
         } else {
-            // Add new product
-            await cartRef.doc(productId).set({
-                productId: productId,
+            await cartRef.doc(productSku).set({
+                productId: productSku,
                 productName: productName,
                 productPrice: productPrice,
-                productImage: productImage || '',
+                productImage: productImage,
+                dosage: dosage,
                 quantity: 1,
                 addedAt: firebase.firestore.FieldValue.serverTimestamp(),
                 updatedAt: firebase.firestore.FieldValue.serverTimestamp()
@@ -56,9 +65,8 @@ async function addToCartFirestore(uid, productId, productName, productPrice, pro
         }
 
         alert('✅ Product added to cart successfully!');
-        console.log('✅ Product added to cart:', productName);
+        console.log('✅ Product added to cart:', productName, dosage ? `(${dosage})` : '');
 
-        // Update cart count in navigation
         updateCartCount(uid);
 
     } catch (error) {
@@ -141,7 +149,7 @@ window.loadCart = async function () {
                         <img src="${item.productImage || 'images/products/placeholder.jpg'}" alt="${item.productName}" onerror="this.src='images/products/placeholder.jpg'">
                     </div>
                     <div class="cart-item-details">
-                        <h3>${item.productName}</h3>
+                        <h3>${item.productName}${item.dosage ? ` <span class="cart-item-dosage">(${item.dosage})</span>` : ''}</h3>
                         <p class="cart-item-price">RM ${item.productPrice.toFixed(2)}</p>
                     </div>
                     <div class="cart-item-actions">
