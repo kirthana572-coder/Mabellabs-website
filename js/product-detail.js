@@ -3,6 +3,7 @@
 document.addEventListener('DOMContentLoaded', function() {
 
     // ================= ALL PRODUCT DATA =================
+    // weight: product weight in grams (g). Placeholder 0 — replace with actual weight for domestic shipping calculation.
     const allProducts = {
         // Whitening Products
         'WH-001': {
@@ -10,6 +11,8 @@ document.addEventListener('DOMContentLoaded', function() {
             category: "Whitening series",
             brand: "Mabel Labs Professional Series",
             price: "RM 699.00 / Box",
+            // Weight in grams (g) — used later for domestic shipping calculation. Replace 0 with the actual product weight.
+            weight: 0,
             status: "In Stock",
             image: "images/products/dermagene.png",
             shortDesc: "SLC24A5 Activity Brightening Technology",
@@ -61,6 +64,8 @@ document.addEventListener('DOMContentLoaded', function() {
             category: "Whitening series",
             brand: "Gluta Therapy",
             price: "RM 8500.00 / Box",
+            // Weight in grams (g) — used later for domestic shipping calculation. Replace 0 with the actual product weight.
+            weight: 0,
             status: "In Stock",
             image: "images/products/TherapyGluta.jpeg",
             shortDesc: "EXO-THERAPY III Brightening Complex",
@@ -110,6 +115,8 @@ document.addEventListener('DOMContentLoaded', function() {
             category: "Whitening series",
             brand: "Mabel Labs Professional Series",
             price: "RM 350.00 / Box",
+            // Weight in grams (g) — used later for domestic shipping calculation. Replace 0 with the actual product weight.
+            weight: 0,
             status: "In Stock",
             image: "images/products/Royalbooster.jpeg",
             shortDesc: "Power Vitamin C & Glutathione Brightening Complex",
@@ -163,6 +170,8 @@ document.addEventListener('DOMContentLoaded', function() {
             category: "Whitening series",
             brand: "Mabel Labs Professional Series",
             price: "RM 350.00 / Box",
+            // Weight in grams (g) — used later for domestic shipping calculation. Replace 0 with the actual product weight.
+            weight: 0,
             status: "In Stock",
             image: "images/products/Viscera.jpeg",
             shortDesc: "Premier Duo Phyto Stemcell Therapy",
@@ -220,6 +229,8 @@ document.addEventListener('DOMContentLoaded', function() {
             category: "Whitening series",
             brand: "29 NEXENTURY",
             price: "RM 2200.00",
+            // Weight in grams (g) — used later for domestic shipping calculation. Replace 0 with the actual product weight.
+            weight: 0,
             status: "In Stock",
             image: "images/products/Marinepearl.jpeg",
             shortDesc: "Professional Aesthetic Injectable",
@@ -275,6 +286,8 @@ document.addEventListener('DOMContentLoaded', function() {
             category: "Whitening series",
             brand: "29 NEXENTURY",
             price: "RM 3000.00",
+            // Weight in grams (g) — used later for domestic shipping calculation. Replace 0 with the actual product weight.
+            weight: 0,
             status: "In Stock",
             image: "images/products/YumiKojicasid.jpg",
             shortDesc: "Professional Aesthetic Injectable",
@@ -326,6 +339,8 @@ document.addEventListener('DOMContentLoaded', function() {
             category: "Whitening series",
             brand: "Mabel Labs Professional Series",
             price: "RM 390.00 / Box",
+            // Weight in grams (g) — used later for domestic shipping calculation. Replace 0 with the actual product weight.
+            weight: 0,
             status: "In Stock",
             image: "images/products/Royalultrabooster.jpeg",
             shortDesc: "Premium Stem Cell & Antioxidant Infusion Complex",
@@ -380,6 +395,8 @@ document.addEventListener('DOMContentLoaded', function() {
             category: "Whitening series",
             brand: "29 NEXENTURY",
             price: "RM 25000.00 / Box",
+            // Weight in grams (g) — used later for domestic shipping calculation. Replace 0 with the actual product weight.
+            weight: 0,
             status: "In Stock",
             image: "images/products/SLC24A4.jpeg",
             shortDesc: "Professional Aesthetic Solution",
@@ -428,6 +445,8 @@ document.addEventListener('DOMContentLoaded', function() {
             category: "Whitening series",
             brand: "29 NEXENTURY",
             price: "RM 800.00 / Box",
+            // Weight in grams (g) — used later for domestic shipping calculation. Replace 0 with the actual product weight.
+            weight: 0,
             status: "In Stock",
             image: "images/products/fairpluscapsules.jpeg",
             shortDesc: "Whitening Supplement",
@@ -479,6 +498,8 @@ document.addEventListener('DOMContentLoaded', function() {
             category: "Whitening series",
             brand: "Mabel Labs Professional Series",
             price: "RM 15000.00 / Box",
+            // Weight in grams (g) — used later for domestic shipping calculation. Replace 0 with the actual product weight.
+            weight: 0,
             status: "In Stock",
             image: "images/products/Complexionexchanger2.jpeg",
             shortDesc: "SLC24A5 Activity Brightening Technology",
@@ -529,6 +550,8 @@ document.addEventListener('DOMContentLoaded', function() {
             category: " Stem Cell Therapy",
             brand: "Mabel Labs Professional Series",
             price: "RM 2000.00",
+            // Weight in grams (g) — used later for domestic shipping calculation. Replace 0 with the actual product weight.
+            weight: 0,
             status: "In Stock",
             image: "images/products/BLC02W5.jpeg",
             shortDesc: "Intravenous whitening therapy formulated to support brighter, healthier-looking skin while promoting overall skin rejuvenation.",
@@ -584,6 +607,8 @@ document.addEventListener('DOMContentLoaded', function() {
             category: "Anti-Aging & Regeneration",
             brand: "Pure Pharma",
             price: "RM 259.00",
+            // Weight in grams (g) — used later for domestic shipping calculation. Replace 0 with the actual product weight.
+            weight: 0,
             status: "In Stock",
             image: "images/products/GHKCU50MG.jpeg",
             shortDesc: "Copper peptide 50mg for next level skin & tissue rejuvenation. Stimulates collagen, accelerates repair, and reduces fine lines.",
@@ -635,6 +660,8 @@ document.addEventListener('DOMContentLoaded', function() {
             category: "Anti-Aging & Regeneration",
             brand: "Pure Pharma",
             price: "RM 399.00",
+            // Weight in grams (g) — used later for domestic shipping calculation. Replace 0 with the actual product weight.
+            weight: 0,
             status: "In Stock",
             image: "images/products/GHKCU.jpeg",
             shortDesc: "Copper peptide 100mg for next level skin & tissue rejuvenation. Stimulates collagen, accelerates repair, and reduces fine lines.",
@@ -687,6 +714,8 @@ document.addEventListener('DOMContentLoaded', function() {
         category: "Anti-Aging & Regeneration",
         brand: "OEM",
         price: "RM 650.00",          // Single pen price
+            // Weight in grams (g) — used later for domestic shipping calculation. Replace 0 with the actual product weight.
+            weight: 0,
         priceOld: null,               // No discount for 1 unit
        bulkPricing: {
     "5 pens": {
@@ -749,6 +778,8 @@ document.addEventListener('DOMContentLoaded', function() {
             category: "Anti-Aging & Regeneration",
             brand: "Pure Pharma",
             price: "RM 259.00",
+            // Weight in grams (g) — used later for domestic shipping calculation. Replace 0 with the actual product weight.
+            weight: 0,
             status: "In Stock",
             image: "images/products/GHKCU50MG.jpeg",
             shortDesc: "Copper peptide 50mg for next level skin & tissue rejuvenation. Stimulates collagen, accelerates repair, and reduces fine lines.",
@@ -800,6 +831,8 @@ document.addEventListener('DOMContentLoaded', function() {
             category: "Anti-Aging & Regeneration",
             brand: "Pure Pharma",
             price: "RM 399.00",
+            // Weight in grams (g) — used later for domestic shipping calculation. Replace 0 with the actual product weight.
+            weight: 0,
             status: "In Stock",
             image: "images/products/GHKCU.jpeg",
             shortDesc: "Copper peptide 100mg for next level skin & tissue rejuvenation. Stimulates collagen, accelerates repair, and reduces fine lines.",
@@ -851,6 +884,8 @@ document.addEventListener('DOMContentLoaded', function() {
         category: "Anti-Aging & Regeneration",
         brand: "OEM",
         price: "RM 650.00",          // Single pen price
+            // Weight in grams (g) — used later for domestic shipping calculation. Replace 0 with the actual product weight.
+            weight: 0,
         priceOld: null,               // No discount for 1 unit
        bulkPricing: {
     "5 pens": {
@@ -911,6 +946,8 @@ document.addEventListener('DOMContentLoaded', function() {
             category: "Anti-Aging & Regeneration",
             brand: "Gluta Therapy",
             price: "RM 8500.00",
+            // Weight in grams (g) — used later for domestic shipping calculation. Replace 0 with the actual product weight.
+            weight: 0,
             status: "In Stock",
             image: "images/products/exosome.jpeg",
             shortDesc: "Advanced regenerative therapy using naturally occurring extracellular vesicles for cellular repair, tissue regeneration, and anti-aging.",
@@ -967,6 +1004,8 @@ document.addEventListener('DOMContentLoaded', function() {
             category: "Anti-Aging & Regeneration",
             brand: "Mabel Labs Professional Series",
             price: "RM 599.00",
+            // Weight in grams (g) — used later for domestic shipping calculation. Replace 0 with the actual product weight.
+            weight: 0,
             status: "In Stock",
             image: "images/products/NCKX5.jpeg",
             shortDesc: "Melanin Inhibitor Booster. Advanced brightening, cellular renewal, and visible transformation for radiant, even-toned skin.",
@@ -1018,6 +1057,8 @@ document.addEventListener('DOMContentLoaded', function() {
             category: "Anti-Aging & Regeneration",
             brand: "29 Nexentury",
             price: "RM 4500.00",
+            // Weight in grams (g) — used later for domestic shipping calculation. Replace 0 with the actual product weight.
+            weight: 0,
             status: "In Stock",
             image: "images/products/deerplacenta.png",
             shortDesc: "Pure Swiss Sika deer placenta extract. 20:1 concentration. Supports cellular regeneration, anti-aging, and overall vitality.",
@@ -1074,6 +1115,8 @@ document.addEventListener('DOMContentLoaded', function() {
             category: "Anti-Aging & Regeneration",
             brand: "29 Nexentury",
             price: "RM 3500.00",
+            // Weight in grams (g) — used later for domestic shipping calculation. Replace 0 with the actual product weight.
+            weight: 0,
             status: "In Stock",
             image: "images/products/Sheepplacenta.jpeg",
             shortDesc: "Pure Swiss sheep placenta extract. 20:1 concentration. Promotes skin firmness, elasticity, and cellular rejuvenation.",
@@ -1123,6 +1166,8 @@ document.addEventListener('DOMContentLoaded', function() {
             category: "Anti-Aging & Regeneration",
             brand: "29 Nexentury",
             price: "RM 9000.00",
+            // Weight in grams (g) — used later for domestic shipping calculation. Replace 0 with the actual product weight.
+            weight: 0,
             status: "In Stock",
             image: "images/products/peachceramide.png",
             shortDesc: "Advanced stem cell therapy that upregulates UGCG genes to naturally restore skin ceramides for smoother, younger-looking skin.",
@@ -1175,6 +1220,8 @@ document.addEventListener('DOMContentLoaded', function() {
         category: "⚡ Slimming",
         brand: "Pure Pharma",
         price: "RM 450.00",                          // ← NEED PRICE
+            // Weight in grams (g) — used later for domestic shipping calculation. Replace 0 with the actual product weight.
+            weight: 0,
         status: "In Stock",
         image: "images/products/Retra.jpeg",
         shortDesc: "Next-Generation Triple-Hormone Peptide for Advanced Weight Management & Metabolic Optimization",
@@ -1239,6 +1286,8 @@ document.addEventListener('DOMContentLoaded', function() {
     category: "Slimming ",
     brand: "Mabel Labs Professional Series",
     price: "RM 500.00", // Default price
+    // Weight in grams (g) — used later for domestic shipping calculation. Replace 0 with the actual product weight.
+    weight: 0,
     status: "In Stock",
     image: "images/products/Mounjaro.jpeg",
     shortDesc: "Dual GIP and GLP-1 receptor agonist for improved blood glucose control and weight management. Available in multiple dosages.",
@@ -1313,6 +1362,8 @@ document.addEventListener('DOMContentLoaded', function() {
             category: "Anti-Aging & Regeneration",
             brand: "Mabel Labs Professional Series",
             price: "RM 599.00",
+            // Weight in grams (g) — used later for domestic shipping calculation. Replace 0 with the actual product weight.
+            weight: 0,
             status: "In Stock",
             image: "images/products/NCKX5.jpeg",
             shortDesc: "Melanin Inhibitor Booster.Advanced brightening, cellular renewal, and visible transformation for radiant, even-toned skin.",
@@ -1366,6 +1417,8 @@ document.addEventListener('DOMContentLoaded', function() {
             category: "Supplements",
             brand: "Mabel Labs Professional Series",
             price: "RM 249.00",
+            // Weight in grams (g) — used later for domestic shipping calculation. Replace 0 with the actual product weight.
+            weight: 0,
             status: "In Stock",
             image: "images/products/GlutaCaps.jpeg",
             shortDesc: "Premium Skin Rejuvenation with Gluthathione.",
@@ -1415,6 +1468,8 @@ document.addEventListener('DOMContentLoaded', function() {
             category: "Supplements",
             brand: "29 Nexentury",
             price: "RM 800.00",
+            // Weight in grams (g) — used later for domestic shipping calculation. Replace 0 with the actual product weight.
+            weight: 0,
             status: "In Stock",
             image: "images/products/fairpluscapsules.jpeg",
             shortDesc: "Premium skin brightening and rejuvenation supplement formulated in New Zealand. Helps block melanin production, promotes lighter skin cells, and restores radiance.",
@@ -1467,6 +1522,8 @@ document.addEventListener('DOMContentLoaded', function() {
             category: "Supplements",
             brand: "29 Nexentury",
             price: "RM 800.00",
+            // Weight in grams (g) — used later for domestic shipping calculation. Replace 0 with the actual product weight.
+            weight: 0,
             status: "In Stock",
             image: "images/products/Dcell.jpeg",
             shortDesc:  "Premium health supplement formulated with deer placenta, L-glutathione, and sodium hyaluronate to improve skin texture, elasticity, and overall vitality.",
@@ -1519,6 +1576,8 @@ document.addEventListener('DOMContentLoaded', function() {
             category: "Anti-Aging & Regeneration",
             brand: "OEM",
             price: "RM 599.00",
+            // Weight in grams (g) — used later for domestic shipping calculation. Replace 0 with the actual product weight.
+            weight: 0,
             status: "In Stock",
             image: "images/products/NCKX5.jpeg",
             shortDesc: "Melanin Inhibitor Booster. Advanced brightening, cellular renewal, and visible transformation for radiant, even-toned skin.",
